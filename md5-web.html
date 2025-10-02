@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Dữ liệu MD5</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0"></script>
+  <style>
+	.tabs {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    .tab {
+      padding: 10px 20px;
+      border: 1px solid #ccc;
+      border-bottom: none;
+      background-color: #f1f1f1;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+    .tab.active {
+      background-color: white;
+      font-weight: bold;
+      border-top: 3px solid #007BFF;
+    }
+    .tab-content {
+      border: 1px solid #ccc;
+      padding: 15px;
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+	
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #888;
+      padding: 6px 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    #status, #statusReport {
+      white-space: pre-line;
+      margin-top: 10px;
+      font-family: monospace;
+      color: #333;
+    }
+	
+	.today-code {
+	  background-color: #d0f0ff;
+	  padding: 2px 4px;
+	  border-radius: 3px;
+	}
+	body { font-family: Arial; margin: auto; padding: 20px; padding-left: 50px}
+    button { padding: 10px 20px; font-size: 16px; margin-right: 10px; }
+    #resultAI { font-size: 18px; margin-top: 20px; font-weight: bold; }
+	
+	.container {
+		display: flex;
+		gap: 10px; /* Khoảng cách giữa 2 cột */
+		margin-top: 15px;
+	  }
+
+	.column {
+		flex: 1; /* Mỗi cột chiếm đều chiều rộng */
+		border: 1px solid #ccc;
+		padding: 10px;
+		box-sizing: border-box;
+	}
+  </style>
+</head>
+<body>
+	
+	<div class="tabs">
+	  <div class="tab active" onclick="openTab('summary')">Tổng hợp dữ liệu</div>
+	  <div class="tab" onclick="openTab('risk')">Phân tích rủi ro</div>
+	  <div class="tab" onclick="openTab('investment')">AI dự đoán</div>
+	  <div class="tab" onclick="openTab('vitural')">Giả lập</div>
+	  <div class="tab" onclick="openTab('report')">Thống kê</div>
+	</div>
+	
+	<div id="risk" class="tab-content">
+	  <h2>Nguyên tắc cắt lỗ</h2>
+	  <h3>Tài chính: 5 triệu: chơi 1 con, tới lượt 230 bắt đầu giảm tiền xuống (rủi ro: 10%)</h3>
+	  <h3>Tài chính: 10 triệu</h3>
+	  <span>Chơi 1 con, tới lượt 280 bắt đầu giảm tiền xuống (rủi ro: 8%)</span> </br>
+	  <span>Chơi 2 con, tới lượt 270 bắt đầu giảm tiền xuống (rủi ro: 12%)</span> </br>
+	  <h4>Chơi 1 con 240 lượt => cắt lỗ 2tr6</h4>
+	  <h3>Tài chính: 20 triệu</h3>
+	  <span>Chơi 1 con, tới lượt 320 bắt đầu giảm tiền xuống (rủi ro: 6%)</span></br>
+	  <span>Chơi 2 con, tới lượt 310 bắt đầu giảm tiền xuống (rủi ro: 7%)</span>
+	  <h3>Tài chính: 50 triệu</h3>
+	  <span>Chơi 1 con, tới lượt 380 bắt đầu giảm tiền xuống (rủi ro: 4%)</span></br>
+	  <span>Chơi 2 con, tới lượt 370 bắt đầu giảm tiền xuống (rủi ro: 5%)</span></br>
+	  <h3>Tài chính: 100 triệu</h3>
+	  <span>Chơi 1 con, tới lượt 430 bắt đầu giảm tiền xuống (rủi ro: 0.6%)</span></br>
+	  <span>Chơi 2 con, tới lượt 410 bắt đầu giảm tiền xuống (rủi ro: 1.5%)</span></br>
+	  <span>Chơi 3 con, tới lượt 410 bắt đầu giảm tiền xuống (rủi ro: 4%)</span></br>
+	  <h3>Tài chính: 200 triệu</h3>
+	  <span>Chơi 1 con, tới lượt 470 bắt đầu giảm tiền xuống(rủi ro: 0.4%)</span></br>
+	  <span>Chơi 2 con, tới lượt 460 bắt đầu giảm tiền xuống (rủi ro: 1%)</span></br>
+	  <span>Chơi 3 con, tới lượt 450 bắt đầu giảm tiền xuống (rủi ro: 3%)</span></br>
+	  <span>Chơi 10 con, tới lượt 440 bắt đầu giảm tiền xuống (rủi ro: 15%)</span></br>
+	  <h3>Tài chính: 500 triệu</h3>
+	  <span>Chơi 3 con, tới lượt 500 bắt đầu giảm tiền xuống (rủi ro: 0.8%)</span></br>
+	  <span>Chơi 10 con, tới lượt 490 bắt đầu giảm tiền xuống (rủi ro: 8%)</span></br>
+	  </br>
+	  </br>
+    </div>
+  
+	<div id="summary" class="tab-content active">
+		<button onclick="getAllRecords(1)">Hôm nay</button>
+		<button onclick="getAllRecords(2)">Hôm qua</button>
+		<button onclick="getAllRecords24h()">24h qua</button>
+		<button onclick="getAllRecords(3)">1 Tuần qua</button>
+		<button onclick="groupByMinute(3)">Theo giờ</button>		
+		<p id="output">Kết quả sẽ hiển thị ở đây...</p>
+		<p id="status">Tải dữ liệu...</p>
+	</div>
+
+	<div id="investment" class="tab-content">
+	  <h3>AI dự đoán</h3>
+	  <h2>Dự đoán số có thể xuất hiện trong 200 bước kế tiếp</h2>
+	  <button onclick="trainModel()">🔧 Huấn luyện mô hình</button>
+	  <button onclick="predict()">🔮 Dự đoán</button>
+
+	  <div id="resultAI"></div>
+
+	  <p id="statusAI">Tải dữ liệu...</p>
+	</div>
+
+	<div id="vitural" class="tab-content">
+		<div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+		  <h3>Nhập thông tin</h3>
+		  <label>Số cần đánh (cách nhau bằng dấu phẩy):</label><br>
+		  <input type="text" id="numbers" value="90"><br>
+
+		  <label>Số tiền bắt đầu:</label><br>
+		  <input type="number" id="startMoney" value="1000"><br>
+
+		  <label>Lặp lại:</label><br>
+		  <input type="number" id="loop" value="40"><br><br>
+
+		  <button onclick="runVirtual()">Chạy mô phỏng</button>
+		</div>
+	  <pre id="outputVitural" style="font-family: Arial, sans-serif; font-size: 16px; color: #222;"></pre>
+	</div>
+	
+	<div id="report" class="tab-content">
+		<button onclick="groupByDate()">Phân tích</button>
+		<button onclick="toogle('groupByDateOutputCol')">Xác suất nhiều nhất</button>
+		<button onclick="toogle('calculateStd1440Col')">Hệ số biến thiên 1440</button>
+		<button onclick="toogle('calculateStdTrust1440Col')">Độ tin cậy 1440</button>
+		<div class="container">
+		  <div id="groupByDateOutputCol" class="column">
+			<h3>Xác suất nhiều nhất</h3>
+			<p id="groupByDateOutput">Kết quả sẽ hiển thị ở đây...</p>
+			<p id="groupByDateStatus">Tải dữ liệu...</p>
+		  </div>
+		  <div id="calculateStd1440Col" class="column">
+			<h3>Hệ số biến thiên 1440</h3>
+			<p id="calculateStd1440Output">Kết quả sẽ hiển thị ở đây...</p>
+			<p id="calculateStd1440Status">Tải dữ liệu...</p>
+		  </div>
+		  <div id="calculateStdTrust1440Col" class="column">
+			<h3>Độ tin cậy 1440</h3>
+			<p id="calculateStdTrust1440Output">Kết quả sẽ hiển thị ở đây...</p>
+			<p id="calculateStdTrust1440Status">Tải dữ liệu...</p>
+		  </div>
+		</div>
+	</div>
+  <script>
+  
+   const apiBaseUrl = "https://api.vgjt.info/ldmd5/games/1/results";
+
+	function toogle(id) {
+		const div = document.getElementById(id);
+		if (div.style.display === "none") {
+		  div.style.display = "block";
+		} else {
+		  div.style.display = "none";
+		}
+	}
+	
+	
+	//Tính độ lệch chuẩn
+	async function calculateStdTrust1440(records) {
+		//let records = await findAll(3, "calculateStdTrust1440Status", "calculateStdTrust1440Output");
+
+		// Bước 1: Sắp xếp theo `code` tăng dần
+		//records.sort((a, b) => a.code.localeCompare(b.code));
+		
+		// Bước 2: Gom nhóm theo ngày (phần trước dấu gạch nối trong `code`)
+		const groupedSpecials = {};
+	
+		records.forEach(item => {
+		  const date = item.code.split("-")[0];
+		  const special = item.result.special;
+		  const last2 = parseInt(special.slice(-2), 10);
+
+		  if (!groupedSpecials[date]) {
+			groupedSpecials[date] = [];
+		  }
+
+		  groupedSpecials[date].push(last2);
+		});
+		
+		// Tìm ngày mới nhất
+		const latestDate = Object.keys(groupedSpecials).sort().pop();
+
+		// Xóa ngày đó
+		delete groupedSpecials[latestDate];
+		
+		const days = Object.keys(groupedSpecials);
+		const totalDays = days.length;
+
+		// Tạo mảng 100 phần tử, mỗi phần tử là mảng lịch sử xuất hiện theo ngày
+		const history = Array.from({ length: 100 }, () => []);
+
+		// Ghi nhận số lần xuất hiện mỗi ngày
+		days.forEach(day => {
+		  const nums = groupedSpecials[day];
+		  for (let i = 0; i < 100; i++) {
+			const count = nums.filter(n => n === i).length;
+			history[i].push(count);
+		  }
+		});
+		
+		// Tạo danh sách số và độ lệch chuẩn
+		console.log('Độ tin cậy 1440 - BẮT ĐẦU ===============');
+		const stdList = history
+		  .map((arr, num) => {
+			console.log("số: " + num + "----- đã về các ngày: " + arr);
+			const total = arr.reduce((a, b) => a + b, 0);
+			if (total === 0) return null; // bỏ qua số chưa từng xuất hiện
+			return { number: num, std: calculateStdTrustTemp(arr) };
+		  });
+		  //.filter(Boolean)
+		  //.sort((a, b) => a.std - b.std); // tăng dần theo độ lệch chuẩn
+		  //.slice(0, 10); // lấy 10 số đầu tiên
+		console.log('Độ tin cậy 1440 - KẾT THÚC ===============');
+		let result = '';
+		stdList.forEach(item => {
+			result += `<b>Số ${item.number}</b>: Độ tin cậy = ${item.std}<br><br>`;
+		});
+		
+		document.getElementById('calculateStdTrust1440Output').innerHTML = result;
+	}
+	
+	//Tính độ lệch chuẩn 1440
+	async function calculateStd1440(records) {
+		//let records = await findAll(3, "calculateStd1440Status", "calculateStd1440Output");
+
+		// Bước 1: Sắp xếp theo `code` tăng dần
+		//records.sort((a, b) => a.code.localeCompare(b.code));
+		
+		// Bước 2: Gom nhóm theo ngày (phần trước dấu gạch nối trong `code`)
+		const groupedSpecials = {};
+		
+		records.forEach(item => {
+		  const date = item.code.split("-")[0];
+		  const special = item.result.special;
+		  const last2 = parseInt(special.slice(-2), 10);
+
+		  if (!groupedSpecials[date]) {
+			groupedSpecials[date] = [];
+		  }
+
+		  groupedSpecials[date].push(last2);
+		});
+		
+		// Tìm ngày mới nhất
+		const latestDate = Object.keys(groupedSpecials).sort().pop();
+
+		// Xóa ngày đó
+		delete groupedSpecials[latestDate];
+		
+		const days = Object.keys(groupedSpecials);
+		const totalDays = days.length;
+
+		// Tạo mảng 100 phần tử, mỗi phần tử là mảng lịch sử xuất hiện theo ngày
+		const history = Array.from({ length: 100 }, () => []);
+
+		// Ghi nhận số lần xuất hiện mỗi ngày
+		days.forEach(day => {
+		  const nums = groupedSpecials[day];
+		  for (let i = 0; i < 100; i++) {
+			const count = nums.filter(n => n === i).length;
+			history[i].push(count);
+		  }
+		});
+		
+		console.log('Hệ số biến thiên 1440 - BẮT ĐẦU ===============');
+		// Tạo danh sách số và độ lệch chuẩn
+		const stdList = history
+		  .map((arr, num) => {
+			console.log("số: " + num + "----- đã về các ngày: " + arr);
+			const total = arr.reduce((a, b) => a + b, 0);
+			if (total === 0) return null; // bỏ qua số chưa từng xuất hiện
+			return { number: num, std: calculateStdTemp(arr) };
+		  })
+		  .filter(Boolean)
+		  .sort((a, b) => a.std - b.std); // tăng dần theo độ lệch chuẩn
+		  //.slice(0, 10); // lấy 10 số đầu tiên
+		
+		console.log('Hệ số biến thiên 1440 - KẾT THÚC ===============');
+		let result = '';
+		stdList.forEach(item => {
+			result += `<b>Số ${item.number}</b>: Độ lệch chuẩn = ${item.std.toFixed(2)}<br><br>`;
+		});
+		
+		document.getElementById('calculateStd1440Output').innerHTML = result;
+	}
+	
+	// Tính độ tin cậy cho mỗi số
+    function calculateStdTrustTemp(arr) {
+      const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+      const variance = arr.reduce((sum, val) => sum + (val - mean) ** 2, 0) / (arr.length - 1);
+      const finalRst = Math.sqrt(variance);
+	  const start = Math.floor(Math.abs(mean - finalRst));
+	  const end = Math.floor(Math.abs(mean + finalRst))
+	  return getPositiveIntegersBetween(start, end);
+    }
+	
+	// Tính độ lệch chuẩn cho mỗi số
+    function calculateStdTemp(arr) {
+      const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+      const variance = arr.reduce((sum, val) => sum + (val - mean) ** 2, 0) / (arr.length - 1);
+      const finalRst = Math.sqrt(variance) / mean * 100;
+	  return finalRst;
+    }
+	
+	function getPositiveIntegersBetween(a, b) {
+	  const start = Math.ceil(Math.min(a, b));
+	  const end = Math.floor(Math.max(a, b));
+	  const result = [];
+
+	  for (let i = start + 1; i < end; i++) {
+		if (i > 0) result.push(i); // chỉ lấy số nguyên dương
+	  }
+
+	  return result;
+	}
+	
+	//Tính xác suất về nhiều nhất
+	async function groupByDate() {
+		const records = await findAll(3, "groupByDateStatus", "groupByDateOutput");
+
+		// Bước 1: Sắp xếp theo `code` tăng dần
+		records.sort((a, b) => a.code.localeCompare(b.code));
+		
+		const clone3 = structuredClone(records);
+		const clone4 = structuredClone(records);
+		calculateStd1440(clone3);
+		calculateStdTrust1440(clone4);
+
+		// Bước 2: Gom nhóm theo ngày (phần trước dấu gạch nối trong `code`)
+		const groupedSpecials = {};
+
+		records.forEach(item => {
+		  const date = item.code.split("-")[0];
+		  const special = item.result.special;
+		  const last2 = parseInt(special.slice(-2), 10);
+
+		  if (!groupedSpecials[date]) {
+			groupedSpecials[date] = [];
+		  }
+
+		  groupedSpecials[date].push(last2);
+		});
+		
+		 let allNumbers = [];
+
+		// Gom tất cả các số lại thành một mảng lớn
+		Object.values(groupedSpecials).forEach(arr => {
+		  allNumbers = allNumbers.concat(arr);
+		});
+
+		const totalCount = allNumbers.length;
+		const freq = Array(100).fill(0);
+
+		// Đếm tần suất xuất hiện của từng số từ 0 đến 99
+		allNumbers.forEach(num => {
+		  if (num >= 0 && num < 100) freq[num]++;
+		});
+
+		const predictLength = 200; // số lượt cần dự đoán
+		const topK = 100;
+
+		// Tính xác suất và sắp xếp
+		const predictions = freq.map((count, num) => ({
+		  number: num,
+		  expected: +(count / totalCount * predictLength).toFixed(2)
+		})).sort((a, b) => b.expected - a.expected);
+
+		// Hiển thị kết quả
+		const output = predictions.slice(0, topK)
+		  .map((p, i) => `${i + 1}. Số ${p.number} → Dự đoán xuất hiện: ${p.expected} lần \n`)
+		  .join('\n');
+		  
+		 document.getElementById('groupByDateOutput').innerText = output;
+	}
+	
+	//Giả lập
+	function runVirtual() {
+		let output = '';
+		for (let i = 1; i < 101; i++) {
+			output += print();
+		}
+		document.getElementById("outputVitural").innerText = output;
+	}
+	
+	function print() {
+	  const formatter = new Intl.NumberFormat('en-US', {
+		style: 'currency',
+		currency: 'USD',
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 0
+	  });
+	  
+	  let output = '';
+	  
+	  const numbers = document.getElementById("numbers").value.split(',').map(n => parseInt(n.trim()));
+      const startMoney = parseInt(document.getElementById("startMoney").value);
+      const loop = parseInt(document.getElementById("loop").value);
+
+	  const map = new Map();
+	  initNumberInfo(numbers, startMoney, map);
+
+	  let month = 1200;
+	  const totalDays = month * 30;
+	  let totalMoney = 0;
+	  let totalGet = 0;
+
+	  for (let i = 1; i < totalDays; i++) {
+		if (map.size === 0) {
+		  break;
+		}
+
+		totalMoney += totalMonney(map); // totalMonney cần được viết thêm
+
+		const rdNumber = Math.floor(Math.random() * 100);
+		for (const info of map.values()) {
+		  let count = info.count;
+		  if (count % loop === 0) {
+			info.money *= 2;
+		  }
+		  info.count = count + 1;
+		}
+
+		let matched = -1;
+		for (const number of numbers) {
+		  if (rdNumber === number) {
+			const info = map.get(number);
+			if (info) {
+			  totalGet += info.money * 98;
+			  output += `Trúng thưởng: Lượt ${i} -- tiền cược ${formatter.format(info.money)} -- tổng thưởng: ${formatter.format(totalGet)} --- tổng vốn: ${formatter.format(totalMoney)}\n`;
+			  info.count = 1;
+			  matched = number;
+			}
+			break;
+		  }
+		}
+
+		if (matched > -1) {
+		  map.delete(matched);
+		  matched = -1;
+		}
+	  }
+
+	  output += "---- Tổng tiền thua: " + formatter.format(totalMoney) + "\n";
+      output += "---- Tổng tiền thắng: " + formatter.format(totalGet) + "\n";
+      output += "========================================================================================================================================\n";
+	  return output;
+	}
+
+	// Hàm khởi tạo thông tin ban đầu cho từng số
+	function initNumberInfo(numbers, startMoney, map) {
+	  for (const number of numbers) {
+		map.set(number, { money: startMoney, count: 1 });
+	  }
+	}
+
+	// Hàm tính tổng số tiền hiện tại trong map
+	function totalMonney(map) {
+	  let total = 0;
+	  for (const info of map.values()) {
+		total += info.money;
+	  }
+	  return total;
+	}
+
+	// Lấy dữ liệu
+	
+    async function getPage(type, page, size = 100) {
+      const url = `${apiBaseUrl}?type=${type}&page=${page}&size=${size}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Lỗi khi gọi API trang " + page);
+      const json = await response.json();
+      return json;
+    }
+
+    async function getAllRecords(type) {
+      const allRecords = [];
+      const summary = {}; // A → danh sách code
+      for (let i = 0; i < 100; i++) summary[i] = [];
+
+      const pageSize = 100;
+      let currentPage = 1;
+      let totalPages = 1;
+      let statusEl = document.getElementById("status");
+      let tableContainer = document.getElementById("output");
+      statusEl.innerText = "Đang tải dữ liệu...";
+
+      try {
+		tableContainer.innerHTML = "Đang tải dữ liệu";
+        // Trang đầu
+        const firstPage = await getPage(type, currentPage, pageSize);
+        allRecords.push(...firstPage.records);
+        const totalRecords = firstPage.page.total;
+        totalPages = Math.ceil(totalRecords / pageSize);
+
+        statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
+
+        // Các trang tiếp theo
+        for (let page = 2; page <= totalPages; page++) {
+          const pageData = await getPage(type, page, pageSize);
+          allRecords.push(...pageData.records);
+          statusEl.innerText += `✅ Trang ${page}/${totalPages} - Tổng ${allRecords.length} records\n`;
+        }
+
+		statusEl.innerText += `✅ Tải xong ${totalRecords} records từ ${totalPages} trang...\n`;
+		
+		let arrays = "";
+		console.log(allRecords);
+        // Tổng hợp
+        allRecords.forEach(record => {
+		
+          const special = record.result.special;
+		  arrays = arrays + "," + parseInt(special.slice(-2), 10);
+          const code = record.code.slice(-4);
+          const A = parseInt(special.slice(-2), 10);
+
+          if (!isNaN(A)) {
+            summary[A].push(code);
+          }
+        });
+
+        // Tạo bảng
+        let tableHTML = "<table> <thead><tr><th>Số A</th><th>Danh sách code</th></tr></thead><tbody>";
+
+        for (let i = 0; i < 100; i++) {
+          if (summary[i].length > 0) {
+            tableHTML += "<tr><td>" + i + "</td><td>" + summary[i].join(', ') + "</td></tr>";
+          }
+        }
+
+        tableHTML += "</tbody></table>";
+        tableContainer.innerHTML = tableHTML;
+        statusEl.innerText += `🎉 Hoàn tất! Tổng cộng ${allRecords.length} records.`;
+		return allRecords;
+      } catch (err) {
+        statusEl.innerText += `❌ Lỗi: ${err.message}`;
+        console.error(err);
+      }
+	  return null;
+    }
+	
+	async function findAll(type, divStatus, divOutput) {
+      const allRecords = [];
+      const summary = {}; // A → danh sách code
+      for (let i = 0; i < 100; i++) summary[i] = [];
+
+      const pageSize = 100;
+      let currentPage = 1;
+      let totalPages = 1;
+      let statusEl = document.getElementById(divStatus);
+      let tableContainer = document.getElementById(divOutput);
+      statusEl.innerText = "Đang tải dữ liệu...";
+
+      try {
+		tableContainer.innerHTML = "Kết quả sẽ hiển thị ở đây...";
+        // Trang đầu
+        const firstPage = await getPage(type, currentPage, pageSize);
+        allRecords.push(...firstPage.records);
+        const totalRecords = firstPage.page.total;
+        totalPages = Math.ceil(totalRecords / pageSize);
+
+        statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
+
+        // Các trang tiếp theo
+        for (let page = 2; page <= totalPages; page++) {
+          const pageData = await getPage(type, page, pageSize);
+          allRecords.push(...pageData.records);
+          statusEl.innerText += `✅ Trang ${page}/${totalPages} - Tổng ${allRecords.length} records\n`;
+        }
+
+		statusEl.innerText += `✅ Tải xong ${totalRecords} records từ ${totalPages} trang...\n`;
+		
+		let arrays = "";
+		
+        // Tổng hợp
+        allRecords.forEach(record => {
+          const special = record.result.special;
+		  arrays = arrays + "," + parseInt(special.slice(-2), 10);
+          const code = record.code.slice(-4);
+          const A = parseInt(special.slice(-2), 10);
+
+          if (!isNaN(A)) {
+            summary[A].push(code);
+          }
+        });
+		return allRecords;
+      } catch (err) {
+        console.error(err);
+      }
+	  return null;
+    }
+	
+	
+	async function getAllRecords24h() {
+      const allRecords = [];
+	  const allRecordsTom = [];
+      const summary = {}; // A → danh sách code
+      for (let i = 0; i < 100; i++) summary[i] = [];
+
+      const pageSize = 100;
+      let currentPage = 1;
+      let totalPages = 1;
+      let statusEl = document.getElementById("status");
+      let tableContainer = document.getElementById("output");
+      statusEl.innerText = "Đang tải dữ liệu...";
+		
+	  let type = 1;
+      try {
+		tableContainer.innerHTML = "Đang tải dữ liệu";
+        // Trang đầu
+        const firstPage = await getPage(type, currentPage, pageSize);
+        allRecords.push(...firstPage.records);
+        const totalRecords = firstPage.page.total;
+        totalPages = Math.ceil(totalRecords / pageSize);
+
+        statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
+
+        // Các trang tiếp theo
+        for (let page = 2; page <= totalPages; page++) {
+          const pageData = await getPage(type, page, pageSize);
+          allRecords.push(...pageData.records);
+          statusEl.innerText += `✅ Trang ${page}/${totalPages} - Tổng ${allRecords.length} records\n`;
+        }
+		
+		type = 2;
+		// Trang đầu hôm qua
+        const firstPage24h = await getPage(type, currentPage, pageSize);
+        allRecordsTom.push(...firstPage24h.records);
+        const totalRecords24h = firstPage24h.page.total;
+        totalPages = Math.ceil(totalRecords24h / pageSize);
+
+        statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
+
+        // Các trang tiếp theo hôm qua
+        for (let page = 2; page <= totalPages; page++) {
+          const pageData = await getPage(type, page, pageSize);
+          allRecordsTom.push(...pageData.records);
+          statusEl.innerText += `✅ Trang ${page}/${totalPages} - Tổng ${allRecordsTom.length} records\n`;
+        }
+
+        // Tổng hợp hôm nay
+        allRecords.forEach(record => {
+          const special = record.result.special;
+          const code = record.code.slice(-4);
+          const A = parseInt(special.slice(-2), 10);
+
+          if (!isNaN(A)) {
+            summary[A].push(code);
+          }
+        });
+		
+		// Tổng hợp hôm qua
+		const now = Date.now();
+		const last24hRecords = allRecordsTom.filter(record => {
+		  const createdAt = new Date(record.result.date).getTime();
+		  return (now - createdAt) <= 24 * 60 * 60 * 1000; // trong 24h
+		});
+		
+        last24hRecords.forEach(record => {
+          const special = record.result.special;
+          const code = record.code.slice(-4);
+          const A = parseInt(special.slice(-2), 10);
+
+          if (!isNaN(A)) {
+            summary[A].push(`<span class="today-code">${code}</span>`);
+          }
+        });
+
+        // Tạo bảng
+        let tableHTML = `<table>
+            <thead>
+              <tr><th>Số A</th><th>Danh sách code</th></tr>
+            </thead>
+            <tbody>`;
+
+        for (let i = 0; i < 100; i++) {
+          if (summary[i].length > 0) {
+            tableHTML += `<tr>
+              <td>${i}</td>
+              <td>${summary[i].join(', ')}</td>
+            </tr>`;
+          }
+        }
+
+        tableHTML += `</tbody></table>`;
+        tableContainer.innerHTML = tableHTML;
+        statusEl.innerText += `🎉 Hoàn tất! Tổng cộng ${allRecords.length} records.`;
+
+      } catch (err) {
+        statusEl.innerText += `❌ Lỗi: ${err.message}`;
+        console.error(err);
+      }
+	}
+    
+	function openTab(tabId) {
+	  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+	  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+	  document.querySelector(`.tab[onclick="openTab('${tabId}')"]`).classList.add('active');
+	  document.getElementById(tabId).classList.add('active');
+	}
+	
+	async function groupByMinute(type) {
+	  
+	  const allRecords = [];
+      const summary = {}; // A → danh sách code
+      for (let i = 0; i < 100; i++) summary[i] = [];
+
+      const pageSize = 100;
+      let currentPage = 1;
+      let totalPages = 1;
+      let statusEl = document.getElementById("status");
+      let tableContainer = document.getElementById("output");
+      statusEl.innerText = "Đang tải dữ liệu...";
+
+      try {
+        // Trang đầu
+        const firstPage = await getPage(type, currentPage, pageSize);
+        allRecords.push(...firstPage.records);
+        const totalRecords = firstPage.page.total;
+        totalPages = Math.ceil(totalRecords / pageSize);
+
+        statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
+
+        // Các trang tiếp theo
+        for (let page = 2; page <= totalPages; page++) {
+          const pageData = await getPage(type, page, pageSize);
+          allRecords.push(...pageData.records);
+          statusEl.innerText += `✅ Trang ${page}/${totalPages} - Tổng ${allRecords.length} records\n`;
+        }
+
+		statusEl.innerText += `✅ Tải xong ${totalRecords} records từ ${totalPages} trang...\n`;
+		
+        // Tổng hợp
+        
+		// Gom dữ liệu theo phút
+		  const grouped = {}; // { time: { date: number } }
+		  const allDatesSet = new Set();
+
+		  allRecords.forEach(item => {
+			const code = item.code;
+			const date = code.slice(0, 8);      // YYYYMMDD
+			const time = item.result.date.slice(11, 16);     // HHMM
+			const special = item.result.special;
+			
+
+			// Lấy 2 số cuối của special
+			let number = '';
+			if (special && /^\d{5}$/.test(special)) {
+				number = special.slice(-2); // Lấy 2 số cuối
+			}
+
+			allDatesSet.add(date);
+
+			if (!grouped[time]) grouped[time] = {};
+			grouped[time][date] = number;
+		  });
+
+		  // Danh sách 1440 phút trong ngày
+		  const allTimes = Array.from({ length: 1440 }, (_, i) => {
+			const hour = String(Math.floor(i / 60)).padStart(2, '0');
+			const minute = String(i % 60).padStart(2, '0');
+			return hour + ":" + minute;
+		  });
+
+		  // Danh sách ngày (giảm dần)
+		  const allDates = Array.from(allDatesSet).sort((a, b) => b.localeCompare(a));
+
+		  // Tạo bảng HTML
+		  let html = '<table border="1" cellpadding="4" cellspacing="0"><thead><tr>';
+		  html += '<th>🕒 Thời gian</th>';
+		  allDates.forEach(date => {
+			html += `<th>${formatDate(date)}</th>`;
+		  });
+		  html += '</tr></thead><tbody>';
+
+		  allTimes.forEach(time => {
+			html += `<tr><td>${time}</td>`;
+			allDates.forEach(date => {
+			  const value = grouped[time]?.[date] ?? '';
+			  html += `<td>${value}</td>`;
+			});
+			html += '</tr>';
+		  });
+
+		  html += '</tbody></table>';
+		  document.getElementById('output').innerHTML = html;
+      } catch (err) {
+        statusEl.innerText += `❌ Lỗi: ${err.message}`;
+        console.error(err);
+      }
+	}
+
+	// Định dạng "20250729" → "29/07/2025"
+	function formatDate(yyyymmdd) {
+	  return `${yyyymmdd.slice(6, 8)}/${yyyymmdd.slice(4, 6)}/${yyyymmdd.slice(0, 4)}`;
+	}
+
+	// Định dạng "0001" → "00:01"
+	function formatTime(hhmm) {
+	  return `${hhmm.slice(0, 2)}:${hhmm.slice(2)}`;
+	}
+	
+	//Train AI
+	let model;
+	let todayResult;
+  
+    async function getPage(type, page, size = 100) {
+      const url = `${apiBaseUrl}?type=${type}&page=${page}&size=${size}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Lỗi khi gọi API trang " + page);
+      const json = await response.json();
+      return json;
+    }
+	
+	async function getAllRecordsAI(type) {
+      const allRecords = [];
+      const summary = {}; // A → danh sách code
+      for (let i = 0; i < 100; i++) summary[i] = [];
+
+      const pageSize = 100;
+      let currentPage = 1;
+      let totalPages = 1;
+      let statusEl = document.getElementById("statusAI");
+      statusEl.innerText = "Đang tải dữ liệu...";
+
+      try {
+        // Trang đầu
+        const firstPage = await getPage(type, currentPage, pageSize);
+        allRecords.push(...firstPage.records);
+        const totalRecords = firstPage.page.total;
+        totalPages = Math.ceil(totalRecords / pageSize);
+
+        statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
+
+        // Các trang tiếp theo
+        for (let page = 2; page <= totalPages; page++) {
+          const pageData = await getPage(type, page, pageSize);
+          allRecords.push(...pageData.records);
+          statusEl.innerText += `✅ Trang ${page}/${totalPages} - Tổng ${allRecords.length} records\n`;
+        }
+
+        // Tổng hợp
+        const summaryByDate = {};
+
+		// Sắp xếp các records theo field `code` tăng dần
+		const sortedRecords = allRecords.sort((a, b) => {
+		  if (!a.code || !b.code) return 0;
+		  return a.code.localeCompare(b.code);
+		});
+
+		sortedRecords.forEach(record => {
+		  const code = record.code;
+		  if (!code || code.length < 8) return;
+
+		  const dateStr = code.slice(0, 8); // Lấy ngày từ field 'code'
+		  const special = record.result?.special;
+		  if (!special) return;
+
+		  const twoDigit = parseInt(special.slice(-2));
+		  if (isNaN(twoDigit)) return;
+
+		  if (!summaryByDate[dateStr]) {
+			summaryByDate[dateStr] = [];
+		  }
+
+		  summaryByDate[dateStr].push(twoDigit);
+		});
+
+		// Tạo mảng kết quả cuối cùng
+		const result = Object.entries(summaryByDate).map(([date, numbers]) => ({
+		  date,
+		  number: numbers
+		}));
+		
+		todayResult = result[result.length - 1];
+		return result;
+      } catch (err) {
+        statusEl.innerText += `❌ Lỗi: ${err.message}`;
+        console.error(err);
+      }
+    }
+	
+
+  function prepareTrainingFromJSON(dataJSON) {
+    const inputs = [];
+    const labels = [];
+
+    dataJSON.forEach(item => {
+      const seq = item.number;
+      const lookback = todayResult.number.length;
+      const horizon = 200;
+
+      if (seq.length < lookback + horizon) return;
+
+      for (let start = 0; start <= seq.length - lookback - horizon; start += 10) {
+        const input = seq.slice(start, start + lookback);
+        const future = seq.slice(start + lookback, start + lookback + horizon);
+        const labelNum = future[Math.floor(Math.random() * future.length)];
+        const label = new Array(100).fill(0);
+        label[labelNum] = 1;
+
+        inputs.push(input);
+        labels.push(label);
+      }
+    });
+
+    const xs = tf.tensor2d(inputs);
+    const ys = tf.tensor2d(labels);
+    return { xs, ys };
+  }
+
+  async function createModel() {
+    const m = tf.sequential();
+    m.add(tf.layers.dense({ inputShape: [todayResult.number.length], units: 128, activation: 'relu' }));
+    m.add(tf.layers.dropout({ rate: 0.2 }));
+    m.add(tf.layers.dense({ units: 100, activation: 'softmax' }));
+    m.compile({ optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ['accuracy'] });
+    return m;
+  }
+
+  async function trainModel() {
+    document.getElementById("resultAI").innerText = "⏳ Đang xử lý dữ liệu và huấn luyện...";
+
+	const parsedData = await getAllRecordsAI(3);
+    const { xs, ys } = prepareTrainingFromJSON(parsedData);
+    model = await createModel();
+    await model.fit(xs, ys, {
+      epochs: 10,
+      batchSize: 32,
+      callbacks: {
+        onEpochEnd: (epoch, logs) => {
+          console.log(`Epoch ${epoch + 1}: loss=${logs.loss.toFixed(4)}`);
+        }
+      }
+    });
+
+    xs.dispose();
+    ys.dispose();
+
+    document.getElementById("resultAI").innerText = "✅ Mô hình đã huấn luyện xong! Bấm nút dự đoán để lấy số.";
+  }
+
+  async function predict() {
+    if (!model) {
+      document.getElementById("result").innerText = "⚠️ Vui lòng huấn luyện mô hình trước!";
+      return;
+    }
+
+    const inputTensor = tf.tensor2d([todayResult.number]);  // [1, 646]
+    const prediction = model.predict(inputTensor);
+    const predictedIndex = (await prediction.argMax(1).data())[0];
+    document.getElementById("resultAI").innerText = `🔮 Dự đoán: Số ${predictedIndex} sẽ xuất hiện trong 200 phần tử tiếp theo.`;
+
+    inputTensor.dispose();
+    prediction.dispose();
+  }
+  
+  </script>
+</body>
+</html>
