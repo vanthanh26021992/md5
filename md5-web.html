@@ -158,7 +158,7 @@
 		<button onclick="groupByDate()">Phân tích</button>
 		<button onclick="toogle('groupByDateOutputCol')">Xác suất nhiều nhất</button>
 		<button onclick="toogle('calculateStd1440Col')">Hệ số biến thiên 1440</button>
-		<button onclick="toogle('calculateStdTrust1440Col')">Độ tin cậy 1440</button>
+		<button onclick="toogle('calculateStdTrust1440Col')">Số lượt về 6 ngày qua</button>
 		<div class="container">
 		  <div id="groupByDateOutputCol" class="column">
 			<h3>Xác suất nhiều nhất</h3>
@@ -171,7 +171,7 @@
 			<p id="calculateStd1440Status">Tải dữ liệu...</p>
 		  </div>
 		  <div id="calculateStdTrust1440Col" class="column">
-			<h3>Độ tin cậy 1440</h3>
+			<h3>Số lượt về 6 ngày qua</h3>
 			<p id="calculateStdTrust1440Output">Kết quả sẽ hiển thị ở đây...</p>
 			<p id="calculateStdTrust1440Status">Tải dữ liệu...</p>
 		  </div>
@@ -236,9 +236,13 @@
 		
 		// Tạo danh sách số và độ lệch chuẩn
 		console.log('Độ tin cậy 1440 - BẮT ĐẦU ===============');
+		let result = '';
 		const stdList = history
 		  .map((arr, num) => {
 			console.log("số: " + num + "----- đã về các ngày: " + arr);
+			
+			result += `<b>Số ${num}</b>: ${arr}<br><br>`;
+			
 			const total = arr.reduce((a, b) => a + b, 0);
 			if (total === 0) return null; // bỏ qua số chưa từng xuất hiện
 			return { number: num, std: calculateStdTrustTemp(arr) };
@@ -247,10 +251,6 @@
 		  //.sort((a, b) => a.std - b.std); // tăng dần theo độ lệch chuẩn
 		  //.slice(0, 10); // lấy 10 số đầu tiên
 		console.log('Độ tin cậy 1440 - KẾT THÚC ===============');
-		let result = '';
-		stdList.forEach(item => {
-			result += `<b>Số ${item.number}</b>: Độ tin cậy = ${item.std}<br><br>`;
-		});
 		
 		document.getElementById('calculateStdTrust1440Output').innerHTML = result;
 	}
