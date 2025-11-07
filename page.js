@@ -11,7 +11,7 @@ class BetApp {
 	this.successLog = document.getElementById("successLog");
 
 	this.token = null;
-	this.tp_token = "70-1dfbac0c6e9d11bb5aee08d2aa16fd4b";
+	this.tp_token = "";
 
 	this.jobInterval = null;
 	this.isRunning = false;
