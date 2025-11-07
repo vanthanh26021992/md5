@@ -183,10 +183,10 @@ class BetApp {
 	  if (this.numbers.length === 0) {
 		const selected = document.querySelectorAll(".num-cell input[type='checkbox']:checked");
 	    for (const checkbox of selected) {
-	      const number = parseInt(checkbox.value);
+	      const number = checkbox.value;
 	      const row = document.querySelector(`#row-${number}`);
 	      const amount = parseInt(row.querySelector(".amount").value) || 1000;
-	      this.numbers.push({amount: amount, number: number});
+	      this.numbers.push({amount: amount, number: parseInt(number)});
 	    }
 	  }
 	  
@@ -208,7 +208,10 @@ class BetApp {
 		  document.getElementById("successSound").play();
 		  this.totalWin += firstNumber.amount * 98;
 		  this.successLog.textContent += `[${now}] ✅ WIN số ${firstNumber.number} với số tiền ${firstNumber.amount} ở lượt thứ ${this.countTurn} || Tổng lỗ: ${this.totalSpent} || Tổng lời: ${this.totalWin} \n`;
-		  if (this.totalWin - this.totalSpent > 500000) this.stopJob();
+		  if (this.totalWin - this.totalSpent > 500000) {
+			this.stopJob();
+			return;
+		  }
 		  this.countTurn = 1;
 		  firstNumber.amount = this.calcBet3(this.countTurn);
 		}
