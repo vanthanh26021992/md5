@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Dữ liệu MD5</title>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css">
+  <link rel="stylesheet" href="page.css">
   <style>
 	.tabs {
       display: flex;
@@ -77,7 +79,7 @@
 	}
   </style>
 </head>
-<body>
+<body class="bg-gray-100 p-4">
 	
 	<div class="tabs">
 	  <div class="tab active" onclick="openTab('summary')">Tổng hợp dữ liệu</div>
@@ -85,6 +87,8 @@
 	  <div class="tab" onclick="openTab('investment')">AI dự đoán</div>
 	  <div class="tab" onclick="openTab('vitural')">Giả lập</div>
 	  <div class="tab" onclick="openTab('report')">Thống kê</div>
+	  <div class="tab" onclick="openTab('auto')">Auto</div>
+	  <div class="tab" onclick="openTab('autoFake')">Giả lập Auto</div>
 	</div>
 	
 	<div id="risk" class="tab-content">
@@ -176,6 +180,89 @@
 			<p id="calculateStdTrust1440Status">Tải dữ liệu...</p>
 		  </div>
 		</div>
+	</div>
+	
+	<div id="auto" class="tab-content">
+	  <h1 class="text-2xl font-bold mb-6">Number Selector</h1>
+
+	  <!-- Danh sách số 00-99 (10 hàng x 10 cột) -->
+	  <div id="numberList" class="mb-6 space-y-2"></div>
+
+	  <!-- Danh sách số đã chọn -->
+	  <div class="mb-6">
+		<h2 class="font-semibold text-lg mb-2">Danh sách số đã chọn</h2>
+		<table class="w-full border text-center">
+		  <thead>
+			<tr class="bg-gray-200">
+			  <th class="border p-2 w-16">Số</th>
+			  <th class="border p-2 w-28">Số tiền</th>
+			  <th class="border p-2 w-28">Số lượt</th>
+			  <th class="border p-2">Số dự phòng</th>
+			</tr>
+		  </thead>
+		  <tbody id="selectedNumbers"></tbody>
+		</table>
+	  </div>
+	  
+	  <!-- ô nhập số tiền mong muốn -->
+	<div class="desired-money-container">
+	  <label for="desiredMoney">💰 Số tiền mong muốn:</label>
+	  <input type="number" id="desiredMoney" min="1" value="500000">
+	</div>
+	
+	<!-- Ô nhập Username / Password -->
+	<div class="login-container">
+	  <label>Username</label>
+	  <input type="text" id="username" placeholder="Username">
+	</div>
+	<div class="login-container">
+	  <label>Password</label>
+	  <input type="password" id="password" placeholder="Password"> <br>
+	</div>
+	<div class="login-container">
+	  <label>Token</label>
+	  <input type="text" id="token" placeholder="Token">
+	</div>
+	
+	<div id="messageAuto">
+	</div>
+	
+	<!-- Nút điều khiển -->
+	<div id="runningIndicator">
+	  <div class="running-dot"></div>
+	  <span>Đang chạy...</span>
+	</div>
+	
+	
+	<!-- Nút điều khiển -->
+	<div class="flex gap-4 mb-6">
+	  <button id="startBtn" class="btn btn-start">▶ Start</button>
+	  <button id="startBtn1" class="btn btn-start">▶ Start 1</button>
+	  <button id="stopBtn" class="btn btn-stop">■ Stop</button>
+	</div>
+
+	  <!-- Log -->
+	  <div class="log-container">
+		<div class="log-box">
+		  <h3 class="font-semibold mb-2">Log công việc</h3>
+		  <pre id="logArea"></pre>
+		</div>
+		<div class="log-box">
+		  <h3 class="font-semibold mb-2">Log kết quả đúng</h3>
+		  <pre id="successLog"></pre>
+		</div>
+	  </div>
+	  <audio id="successSound" src="win.mp3" preload="auto" hidden></audio>
+	  <script src="page.js"></script>
+	</div>
+	
+	<!-- Auto fake-->
+	<div id="autoFake" class="tab-content">
+	  <button id="autoFakeBtn" class="btn btn-stop">Run fake</button>
+	  <div class="container">
+	    <p id="autoFakeResult"></p>
+	  </div>
+	  <script src="runfake.js"></script>
 	</div>
   <script>
   

@@ -1,0 +1,212 @@
+	#numberList {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 8px;
+      max-width: 600px;
+    }
+
+    /* ======= Ô số ======= */
+    .num-cell {
+      background-color: #ffffff;
+      border: 2px solid #d1d5db;
+      border-radius: 0.5rem;
+      text-align: center;
+      padding: 10px 0;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .num-cell:hover {
+      background-color: #f1f5f9;
+      transform: scale(1.05);
+      border-color: #9ca3af;
+    }
+
+    /* ======= Khi được chọn ======= */
+    .num-cell.selected {
+      background-color: #34d399; /* xanh mint */
+      border-color: #059669;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    /* Ẩn checkbox, chỉ click vào ô */
+    .num-cell input[type="checkbox"] {
+      display: none;
+    }
+
+   /* ======= Nút Start / Stop ======= */
+    .btn {
+      min-width: 120px;
+      padding: 10px 20px;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      color: white;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    .btn-start {
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+    }
+
+    .btn-start:hover {
+      background: linear-gradient(90deg, #16a34a, #15803d);
+    }
+
+    .btn-stop {
+      background: linear-gradient(90deg, #ef4444, #dc2626);
+    }
+
+    .btn-stop:hover {
+      background: linear-gradient(90deg, #dc2626, #b91c1c);
+    }
+
+     /* ===== Log columns ===== */
+    .log-container {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .log-box {
+      flex: 1;
+      background-color: white;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      height: 300px;
+      overflow-y: auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .log-box pre {
+      font-family: monospace;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 0.9rem;
+    }
+	
+	/* ===== Margin cho nút Start / Stop ===== */
+	.btn {
+	  margin-right: 12px; /* khoảng cách giữa 2 nút */
+	}
+
+	.btn:last-child {
+	  margin-right: 0; /* nút cuối cùng không cần margin phải */
+	}
+	
+	#startBtn, #stopBtn {
+	  margin: 20px; /* khoảng cách 10px hai bên mỗi nút */
+	}
+	
+	.btn:disabled {
+	  background-color: #ccc;
+	  cursor: not-allowed;
+	  opacity: 0.7;
+	}
+	
+	/* ===== Indicator công việc đang chạy ===== */
+	#runningIndicator {
+	  margin: 20px;
+	  display: none;
+	  align-items: center;
+	  gap: 8px;
+	  margin-bottom: 1rem;
+	  font-weight: 600;
+	  color: #16a34a;
+	}
+
+	#runningIndicator.show {
+	  display: flex;
+	}
+
+	/* Hiệu ứng chấm nhấp nháy */
+	.running-dot {
+	  width: 10px;
+	  height: 10px;
+	  border-radius: 50%;
+	  background-color: #16a34a;
+	  animation: blink 1s infinite;
+	}
+
+	@keyframes blink {
+	  0%, 50%, 100% { opacity: 1; }
+	  25%, 75% { opacity: 0.3; }
+	}
+	
+	/* ===== Ô nhập số tiền mong muốn ===== */
+	.desired-money-container {
+	  display: flex;
+	  gap: 10px;
+	  margin: 20px 0;
+	  padding: 12px 20px;
+	  background: #f9fafb;
+	  border-radius: 10px;
+	  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+	  width: fit-content;
+	}
+
+	.desired-money-container label {
+	  font-weight: 600;
+	  color: #333;
+	}
+
+	.desired-money-container input {
+	  width: 120px;
+	  padding: 8px 10px;
+	  border: 1px solid #ccc;
+	  border-radius: 6px;
+	  outline: none;
+	  transition: border-color 0.3s ease;
+	}
+
+	.desired-money-container input:focus {
+	  border-color: #007bff;
+	}
+
+	/* ===== Vùng Login ===== */
+	.login-container {
+	  display: flex;
+	  align-items: center;
+	  gap: 10px;
+	  margin-top: 20px;
+	  margin-bottom: 10px;
+	}
+
+	.login-container input {
+	  padding: 8px 10px;
+	  border: 1px solid #ccc;
+	  border-radius: 6px;
+	  width: 440px;
+	  outline: none;
+	  transition: border-color 0.3s ease;
+	}
+	
+	.login-container label {
+	  width: 100px;
+	}
+
+	.login-container input:focus {
+	  border-color: #007bff;
+	}
+
+	.btn.login {
+	  background-color: #2563eb;
+	}
+
+	.btn.login:hover {
+	  background-color: #1e40af;
+	}
+
+
+	
+
