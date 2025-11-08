@@ -228,8 +228,7 @@ class BetApp {
 		if (lastResult === firstNumber.number) {
 		  document.getElementById("successSound").play();
 		  this.totalWin += firstNumber.amount * 98;
-		  this.successLog.textContent += `[${now}] ✅ WIN số ${firstNumber.number} với số tiền ${this.formatter.format(firstNumber.amount)} ở lượt thứ ${this.countTurn} || 
-										Tổng lỗ: ${this.formatter.format(this.totalSpent)} || Tổng lời: ${this.formatter.format(this.totalWin)} || Lợi nhuận: ${this.formatter.format(this.totalWin - this.totalSpent)}\n\n`;
+		  this.successLog.textContent += `[${now}] ✅ WIN số ${firstNumber.number} với số tiền ${this.formatter.format(firstNumber.amount)} ở lượt thứ ${this.countTurn} || Tổng lỗ: ${this.formatter.format(this.totalSpent)} || Tổng lời: ${this.formatter.format(this.totalWin)} || Lợi nhuận: ${this.formatter.format(this.totalWin - this.totalSpent)}\n\n`;
 		  
 		  const input = document.getElementById("desiredMoney");
 		  const value = Number(input.value);
