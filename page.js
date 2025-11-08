@@ -292,9 +292,9 @@ class BetApp {
 	  
 	  if (json && json.records) {
 		const special = json.records[0]?.result?.special;
-		return parseInt(special.slice(-2), 10);
+		return special.slice(-2);
 	  }
-      return -1;
+      return "";
     }
 	
 	calcBet3(turnIndex) {
