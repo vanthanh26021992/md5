@@ -22,9 +22,11 @@ class BetApp {
 	this.countTurn = 1;
 	this.comp = this;
 	this.TURN_DEFAULT = 70;
+	this.selectedAmount = 1000;
 	
 	this.totalSpent = 0;
 	this.totalWin = 0;
+	this.formatter = this.formatter();
 	
 	const tokenInput = document.getElementById("token");
 	// Lắng nghe sự kiện thay đổi giá trị
@@ -36,6 +38,7 @@ class BetApp {
 	document.getElementById("startBtn").addEventListener("click", () => this.startJob());
 	document.getElementById("startBtn1").addEventListener("click", () => this.startJob1());
 	document.getElementById("stopBtn").addEventListener("click", () => this.stopJob());
+	document.getElementById("updateBtn").addEventListener("click", () => this.updateJob());
 
 	this.render();
   }
@@ -119,6 +122,21 @@ class BetApp {
 	  document.getElementById("runningIndicator").classList.remove("show");
 	}
 
+	updateJob() {
+	  const selected = document.querySelectorAll(".num-cell input[type='checkbox']:checked");
+	  for (const checkbox of selected) {
+	    const number = checkbox.value;
+	    const row = document.querySelector(`#row-${number}`);
+	    const backup = row.querySelector(".backup-number").value;
+		if (backup) {
+		  this.numbers[0].number = backup;
+		  alert("Thay số dự phòng thành công");
+		} else {
+		  alert("Nhập số dự phòng");
+		}
+	  }
+	}
+	
 	addRow(num) {
 	  if (document.getElementById(`row-${num}`)) return;
 	  const row = document.createElement("tr");
@@ -126,8 +144,8 @@ class BetApp {
 	  row.innerHTML = `
 		<td class="border p-2">${num}</td>
 		<td class="border p-2"><input type="number" value="1000" class="amount"></td>
-		<td class="border p-2"><input type="number" value="40" class="loop-turn"></td>
-		<td class="border p-2"><input type="text" class="border p-1 rounded w-full" placeholder="Số dự phòng"></td>
+		<td class="border p-2"><input type="number" value="70" class="loop-turn"></td>
+		<td class="border p-2"><input type="text" class="backup-number" placeholder="Số dự phòng"></td>
 	  `;
 	  this.selectedNumbers.appendChild(row);
 	}
@@ -186,16 +204,19 @@ class BetApp {
 	      const number = checkbox.value;
 	      const row = document.querySelector(`#row-${number}`);
 	      const amount = parseInt(row.querySelector(".amount").value) || 1000;
-	      this.numbers.push({amount: amount, number: parseInt(number)});
+		  this.selectedAmount = amount;
+		  this.TURN_DEFAULT = parseInt(row.querySelector(".loop-turn").value) || 70;
+	      this.numbers.push({amount: amount, number: number});
 	    }
 	  }
 	  
+	  console.log("TURN_DEFAULT ", this.TURN_DEFAULT);
 	  console.log(this.numbers);
 	  
 	  let totalAmount = 0;
 	  for (let i = 0; i < this.numbers.length; i++) {
 		const record = this.numbers[i];
-		record.amount = this.calcBet3(this.countTurn);
+		record.amount = this.calcBet4(this.countTurn, this.selectedAmount);
 		totalAmount = totalAmount + record.amount;
 	  }
 	  
@@ -207,13 +228,17 @@ class BetApp {
 		if (lastResult === firstNumber.number) {
 		  document.getElementById("successSound").play();
 		  this.totalWin += firstNumber.amount * 98;
-		  this.successLog.textContent += `[${now}] ✅ WIN số ${firstNumber.number} với số tiền ${firstNumber.amount} ở lượt thứ ${this.countTurn} || Tổng lỗ: ${this.totalSpent} || Tổng lời: ${this.totalWin} \n`;
-		  if (this.totalWin - this.totalSpent > 500000) {
+		  this.successLog.textContent += `[${now}] ✅ WIN số ${firstNumber.number} với số tiền ${this.formatter.format(firstNumber.amount)} ở lượt thứ ${this.countTurn} || 
+										Tổng lỗ: ${this.formatter.format(this.totalSpent)} || Tổng lời: ${this.formatter.format(this.totalWin)} || Lợi nhuận: ${this.formatter.format(this.totalWin - this.totalSpent)}\n\n`;
+		  
+		  const input = document.getElementById("desiredMoney");
+		  const value = Number(input.value);
+		  if (this.totalWin - this.totalSpent > value) {
 			this.stopJob();
 			return;
 		  }
 		  this.countTurn = 1;
-		  firstNumber.amount = this.calcBet3(this.countTurn);
+		  firstNumber.amount = this.calcBet4(this.countTurn, this.selectedAmount);
 		}
 		
 		const payload = {
@@ -242,7 +267,7 @@ class BetApp {
 		const amount = this.numbers[0].amount;
 		
 		if (data && data.status === "RUNNING") {
-		  this.logArea.textContent += `[${now}] ✅ Đặt số ${number} thành công với số tiền ${amount} ở lượt thứ ${this.countTurn} \n`;
+		  this.logArea.textContent += `[${now}] ✅ Đặt số ${number} thành công với số tiền ${this.formatter.format(amount)} ở lượt thứ ${this.countTurn} \n`;
 		  this.countTurn++;
 		  this.totalSpent += totalAmount;
 		} else {
@@ -284,6 +309,25 @@ class BetApp {
 	  else if (turnIndex > this.TURN_DEFAULT * 8 && turnIndex <= this.TURN_DEFAULT * 9) return 50000;
 	  return 1000;
 	}
+	
+	calcBet4(turnIndex, amount) {
+	  if (turnIndex <= this.TURN_DEFAULT) return amount * 1;
+	  else if (turnIndex > this.TURN_DEFAULT * 1 && turnIndex <= this.TURN_DEFAULT * 2) return amount * 2;
+	  else if (turnIndex > this.TURN_DEFAULT * 2 && turnIndex <= this.TURN_DEFAULT * 3) return amount * 4;
+	  else if (turnIndex > this.TURN_DEFAULT * 3 && turnIndex <= this.TURN_DEFAULT * 4) return amount * 8;
+	  else if (turnIndex > this.TURN_DEFAULT * 4 && turnIndex <= this.TURN_DEFAULT * 5) return amount * 16;
+	  else if (turnIndex > this.TURN_DEFAULT * 5 && turnIndex <= this.TURN_DEFAULT * 6) return amount * 32;
+	  else if (turnIndex > this.TURN_DEFAULT * 6 && turnIndex <= this.TURN_DEFAULT * 7) return amount * 64;
+	  else if (turnIndex > this.TURN_DEFAULT * 7 && turnIndex <= this.TURN_DEFAULT * 8) return amount * 50;
+	  else if (turnIndex > this.TURN_DEFAULT * 8 && turnIndex <= this.TURN_DEFAULT * 9) return amount * 50;
+	  return amount;
+	}
+	
+	formatter() {
+	  return new Intl.NumberFormat('vi-VN', {
+		style: 'decimal',
+	  });
+	}
 }
 
 
@@ -291,38 +335,3 @@ class BetApp {
 document.addEventListener("DOMContentLoaded", () => {
   window.betApp = new BetApp();
 });
-
-/**
-document.getElementById("startBtn1").addEventListener("click", () => {
-	  if (running) return;
-	  if (countSelectedNumber < 1) {
-		alert("Mời chọn 1 số");
-		return;
-	  }
-	  running = true;
-	  logArea.textContent += "=== Bắt đầu công việc ===\n";
-	  document.getElementById("runningIndicator").classList.add("show");
-
-	  interval = setInterval(() => {
-		const random = Math.floor(Math.random() * 100).toString().padStart(2, "0");
-		logArea.textContent += `Đang xử lý số ${random}\n`;
-		logArea.scrollTop = logArea.scrollHeight;
-
-		if (Math.random() < 0.05) {
-		  successLog.textContent += `✅ Số ${random} trúng!\n`;
-		  successLog.scrollTop = successLog.scrollHeight;
-		  // Phát âm thanh beep
-		  playSirenSound();
-		}
-	  }, 800);
-	});
-
-	document.getElementById("stopBtn").addEventListener("click", () => {
-	  if (!running) return;
-	  running = false;
-	  countSelectedNumber = 0;
-	  document.getElementById("runningIndicator").classList.remove("show");
-	  clearInterval(interval);
-	  logArea.textContent += "=== Dừng công việc ===\n";
-	});
-*/

@@ -2,7 +2,7 @@
       display: grid;
       grid-template-columns: repeat(10, 1fr);
       gap: 8px;
-      max-width: 600px;
+	  flex: 1;
     }
 
     /* ======= Ô số ======= */
@@ -69,12 +69,21 @@
     .btn-stop:hover {
       background: linear-gradient(90deg, #dc2626, #b91c1c);
     }
+	
+	.btn-update {
+      background: linear-gradient(135deg, #2193b0, #6dd5ed);
+    }
+
+    .btn-update:hover {
+      background: linear-gradient(135deg, #007BFF, #00BFFF);
+    }
 
      /* ===== Log columns ===== */
     .log-container {
       display: flex;
       gap: 1rem;
       width: 100%;
+	  margin-top: 20px;
     }
 
     .log-box {
@@ -83,7 +92,7 @@
       border: 1px solid #d1d5db;
       border-radius: 0.5rem;
       padding: 0.5rem;
-      height: 300px;
+      height: 800px;
       overflow-y: auto;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
@@ -205,6 +214,19 @@
 
 	.btn.login:hover {
 	  background-color: #1e40af;
+	}
+	
+	
+	.main-container {
+	  display: flex;
+	  gap: 20px; /* khoảng cách giữa 2 cột */
+	  align-items: flex-start;
+	}
+	
+	#selectedContainer {
+	  flex: 1;
+	  margin-top: -70px;
+      margin-left: 30px;
 	}
 
 
