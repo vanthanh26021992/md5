@@ -213,13 +213,6 @@ class BetApp {
 	  console.log("TURN_DEFAULT ", this.TURN_DEFAULT);
 	  console.log(this.numbers);
 	  
-	  let totalAmount = 0;
-	  for (let i = 0; i < this.numbers.length; i++) {
-		const record = this.numbers[i];
-		record.amount = this.calcBet4(this.countTurn, this.selectedAmount);
-		totalAmount = totalAmount + record.amount;
-	  }
-	  
 	  try {
 		const lastResult = await this.getResult();
 		const now = new Date().toLocaleTimeString();
@@ -238,6 +231,13 @@ class BetApp {
 		  }
 		  this.countTurn = 1;
 		  firstNumber.amount = this.calcBet4(this.countTurn, this.selectedAmount);
+		}
+		
+		let totalAmount = 0;
+		for (let i = 0; i < this.numbers.length; i++) {
+		  const record = this.numbers[i];
+		  record.amount = this.calcBet4(this.countTurn, this.selectedAmount);
+		  totalAmount = totalAmount + record.amount;
 		}
 		
 		const payload = {
