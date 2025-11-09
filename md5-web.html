@@ -758,7 +758,7 @@
         const totalRecords24h = firstPage24h.page.total;
         totalPages = Math.ceil(totalRecords24h / pageSize);
 
-        statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
+        statusEl.innerText = `🔄 Đang tải ${totalRecords24h} records từ ${totalPages} trang...\n`;
 
         // Các trang tiếp theo hôm qua
         for (let page = 2; page <= totalPages; page++) {
@@ -779,10 +779,8 @@
         });
 		
 		// Tổng hợp hôm qua
-		const now = Date.now();
 		const last24hRecords = allRecordsTom.filter(record => {
-		  const createdAt = new Date(record.result.date).getTime();
-		  return (now - createdAt) <= 24 * 60 * 60 * 1000; // trong 24h
+		  return parseInt(record.code.slice(-4), 10) > totalRecords;
 		});
 		
         last24hRecords.forEach(record => {
