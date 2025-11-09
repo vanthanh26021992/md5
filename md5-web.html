@@ -82,15 +82,15 @@
 <body class="bg-gray-100 p-4">
 	
 	<div class="tabs">
-	  <div class="tab active" onclick="openTab('summary')">Tổng hợp dữ liệu</div>
+	  <div class="tab" onclick="openTab('summary')">Tổng hợp dữ liệu</div>
 	  <div class="tab" onclick="openTab('vitural')">Giả lập</div>
 	  <div class="tab" onclick="openTab('report')">Thống kê</div>
-	  <div class="tab" onclick="openTab('auto')">Auto 1</div>
+	  <div class="tab active" onclick="openTab('auto')">Auto 1</div>
 	  <div class="tab" onclick="openTab('autoFake')">Giả lập Auto 1</div>
 	  <div class="tab" onclick="openTab('noteTab')">Ghi chú</div>
 	</div>
   
-	<div id="summary" class="tab-content active">
+	<div id="summary" class="tab-content">
 		<button onclick="getAllRecords(1)">Hôm nay</button>
 		<button onclick="getAllRecords(2)">Hôm qua</button>
 		<button onclick="getAllRecords24h()">24h qua</button>
@@ -163,7 +163,7 @@
 		</div>
 	</div>
 	
-	<div id="auto" class="tab-content">
+	<div id="auto" class="tab-content active">
 	  <h1 class="text-2xl font-bold mb-6">Number Selector</h1>
 	  
 	  <div class="main-container">
@@ -220,6 +220,10 @@
 			<label>
 			  <input type="radio" name="betType" value="3">
 			  <span>Hên xui</span>
+			</label>
+			<label>
+			  <input type="radio" name="betType" value="4">
+			  <span>Ưu tiên</span>
 			</label>
 		  </div>
 		</div>

@@ -18,6 +18,7 @@ class BetApp {
 
 	this.countSelectedNumber = 0;
 	this.numbers = [];
+	this.storedNumbers = [];
 	
 	this.countTurn = 1;
 	this.comp = this;
@@ -149,7 +150,8 @@ class BetApp {
 	}
 	
 	addRow(num) {
-	  if (document.getElementById(`row-${num}`)) return;
+	  let addRowEle = document.getElementById(`row-${num}`);
+	  if (addRowEle) return;
 	  const row = document.createElement("tr");
 	  row.id = `row-${num}`;
 	  row.innerHTML = `
@@ -159,11 +161,18 @@ class BetApp {
 		<td class="border p-2"><input type="text" class="backup-number" placeholder="Số dự phòng"></td>
 	  `;
 	  this.selectedNumbers.appendChild(row);
+	  if (this.storedNumbers.length === 0) {
+		row.classList.add("highlight-green");
+	  }
+	  this.storedNumbers.push({number: num, passed: false});
 	}
 
 	removeRow(num) {
 	  const row = document.getElementById(`row-${num}`);
-	  if (row) row.remove();
+	  if (row) {
+		row.remove();
+		this.storedNumbers = this.storedNumbers.filter(obj => obj.number !== num);
+	  }
 	}
 
 	async login() {
@@ -242,6 +251,7 @@ class BetApp {
 		  }
 		  this.countTurn = 1;
 		  firstNumber.amount = this.calcBet(this.countTurn, this.selectedAmount);
+		  if (this.betType === "4") this.calNumber(lastResult);
 		}
 		
 		let totalAmount = 0;
@@ -291,19 +301,31 @@ class BetApp {
 	  }
 	}
 	
-	// Lấy dữ liệu
-    async getResult() {
-      const url = `${this.RESULT_URL}?type=1&page=1&size=1`;
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Lỗi khi gọi API trang " + page);
-      const json = await response.json();
-	  
-	  if (json && json.records) {
-		const special = json.records[0]?.result?.special;
-		return special.slice(-2);
+	calNumber(lastResult) {
+	  for (let i = 0; i < this.storedNumbers.length; i++) {
+	    let storedNumber = this.storedNumbers[i];
+		if (lastResult === storedNumber.number) {
+		  storedNumber.pass = true;
+		  let addRowEle = document.getElementById(`row-${lastResult}`);
+		  addRowEle.classList.add("highlight-orange");
+		  addRowEle.classList.remove("highlight-green");
+		  break;
+		}
 	  }
-      return "";
-    }
+	  
+	  let countTem = 0;
+	  for (let i = 0; i < this.storedNumbers.length; i++) {
+	    let storedNumber = this.storedNumbers[i];
+		if (!storedNumber.pass) {
+		  let addRowEle = document.getElementById(`row-${storedNumber.number}`);
+		  this.numbers[0].number = storedNumber.number;
+		  addRowEle.classList.add("highlight-green");
+		  countTem++;
+		  break;
+		}
+	  }
+	  if (countTem === 0) this.numbers[0].number = this.storedNumbers[0].number;
+	}
 	
 	calcBet(turnIndex, amount) {
 	  if (this.betType === "1") return this.calcBet1(turnIndex, amount);
@@ -358,6 +380,20 @@ class BetApp {
 	  }
 	  return 1000;
 	}
+	
+	// Lấy dữ liệu
+    async getResult() {
+      const url = `${this.RESULT_URL}?type=1&page=1&size=1`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Lỗi khi gọi API trang " + page);
+      const json = await response.json();
+	  
+	  if (json && json.records) {
+		const special = json.records[0]?.result?.special;
+		return special.slice(-2);
+	  }
+      return "";
+    }
 	
 	formatter() {
 	  return new Intl.NumberFormat('vi-VN', {

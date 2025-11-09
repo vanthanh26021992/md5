@@ -284,6 +284,14 @@
 	  color: #333;
 	  margin-top: 8px;
 	}
+	
+	.highlight-green {
+	  background-color: #9DD1A5 !important;
+	}
+	
+	.highlight-orange {
+	  background-color: #F4A460;
+	}
 
 
 
