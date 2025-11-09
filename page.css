@@ -228,6 +228,63 @@
 	  margin-top: -70px;
       margin-left: 30px;
 	}
+	
+	.radio-group-wrapper {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  margin: 20px 0;
+	}
+
+	.radio-group-label {
+	  font-size: 1.1em;
+	  font-weight: 600;
+	  color: #0056b3;
+	  margin-bottom: 10px;
+	}
+
+	.radio-group {
+	  display: flex;
+	  gap: 10px;
+	  justify-content: center;
+	}
+
+	.radio-group label {
+	  display: inline-flex;
+	  align-items: center;
+	  justify-content: center;
+	  cursor: pointer;
+	  border: 2px solid #007bff;
+	  border-radius: 8px;
+	  padding: 8px 20px;
+	  background: white;
+	  font-weight: 600;
+	  color: #007bff;
+	  transition: all 0.2s ease;
+	}
+
+	.radio-group label:hover {
+	  background: #e7f0ff;
+	}
+
+	.radio-group input[type="radio"] {
+	  display: none;
+	}
+
+	.radio-group input[type="radio"]:checked + span {
+	  background: linear-gradient(135deg, #007bff, #00c3ff);
+	  color: white;
+	  border-radius: 6px;
+	  padding: 8px 20px;
+	}
+
+	.selected-text {
+	  text-align: center;
+	  font-weight: bold;
+	  color: #333;
+	  margin-top: 8px;
+	}
+
 
 
 	

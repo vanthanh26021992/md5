@@ -83,42 +83,12 @@
 	
 	<div class="tabs">
 	  <div class="tab active" onclick="openTab('summary')">Tổng hợp dữ liệu</div>
-	  <div class="tab" onclick="openTab('risk')">Phân tích rủi ro</div>
-	  <div class="tab" onclick="openTab('investment')">AI dự đoán</div>
 	  <div class="tab" onclick="openTab('vitural')">Giả lập</div>
 	  <div class="tab" onclick="openTab('report')">Thống kê</div>
 	  <div class="tab" onclick="openTab('auto')">Auto 1</div>
 	  <div class="tab" onclick="openTab('autoFake')">Giả lập Auto 1</div>
+	  <div class="tab" onclick="openTab('noteTab')">Ghi chú</div>
 	</div>
-	
-	<div id="risk" class="tab-content">
-	  <h2>Nguyên tắc cắt lỗ</h2>
-	  <h3>Tài chính: 5 triệu: chơi 1 con, tới lượt 230 bắt đầu giảm tiền xuống (rủi ro: 10%)</h3>
-	  <h3>Tài chính: 10 triệu</h3>
-	  <span>Chơi 1 con, tới lượt 280 bắt đầu giảm tiền xuống (rủi ro: 8%)</span> </br>
-	  <span>Chơi 2 con, tới lượt 270 bắt đầu giảm tiền xuống (rủi ro: 12%)</span> </br>
-	  <h4>Chơi 1 con 240 lượt => cắt lỗ 2tr6</h4>
-	  <h3>Tài chính: 20 triệu</h3>
-	  <span>Chơi 1 con, tới lượt 320 bắt đầu giảm tiền xuống (rủi ro: 6%)</span></br>
-	  <span>Chơi 2 con, tới lượt 310 bắt đầu giảm tiền xuống (rủi ro: 7%)</span>
-	  <h3>Tài chính: 50 triệu</h3>
-	  <span>Chơi 1 con, tới lượt 380 bắt đầu giảm tiền xuống (rủi ro: 4%)</span></br>
-	  <span>Chơi 2 con, tới lượt 370 bắt đầu giảm tiền xuống (rủi ro: 5%)</span></br>
-	  <h3>Tài chính: 100 triệu</h3>
-	  <span>Chơi 1 con, tới lượt 430 bắt đầu giảm tiền xuống (rủi ro: 0.6%)</span></br>
-	  <span>Chơi 2 con, tới lượt 410 bắt đầu giảm tiền xuống (rủi ro: 1.5%)</span></br>
-	  <span>Chơi 3 con, tới lượt 410 bắt đầu giảm tiền xuống (rủi ro: 4%)</span></br>
-	  <h3>Tài chính: 200 triệu</h3>
-	  <span>Chơi 1 con, tới lượt 470 bắt đầu giảm tiền xuống(rủi ro: 0.4%)</span></br>
-	  <span>Chơi 2 con, tới lượt 460 bắt đầu giảm tiền xuống (rủi ro: 1%)</span></br>
-	  <span>Chơi 3 con, tới lượt 450 bắt đầu giảm tiền xuống (rủi ro: 3%)</span></br>
-	  <span>Chơi 10 con, tới lượt 440 bắt đầu giảm tiền xuống (rủi ro: 15%)</span></br>
-	  <h3>Tài chính: 500 triệu</h3>
-	  <span>Chơi 3 con, tới lượt 500 bắt đầu giảm tiền xuống (rủi ro: 0.8%)</span></br>
-	  <span>Chơi 10 con, tới lượt 490 bắt đầu giảm tiền xuống (rủi ro: 8%)</span></br>
-	  </br>
-	  </br>
-    </div>
   
 	<div id="summary" class="tab-content active">
 		<button onclick="getAllRecords(1)">Hôm nay</button>
@@ -129,18 +99,29 @@
 		<p id="output">Kết quả sẽ hiển thị ở đây...</p>
 		<p id="status">Tải dữ liệu...</p>
 	</div>
-
-	<div id="investment" class="tab-content">
-	  <h3>AI dự đoán</h3>
-	  <h2>Dự đoán số có thể xuất hiện trong 200 bước kế tiếp</h2>
-	  <button onclick="trainModel()">🔧 Huấn luyện mô hình</button>
-	  <button onclick="predict()">🔮 Dự đoán</button>
-
-	  <div id="resultAI"></div>
-
-	  <p id="statusAI">Tải dữ liệu...</p>
+	
+	<div id="noteTab" class="tab-content">
+	  <h1>Công thức tính: </h1>
+	  <h2>Chuẩn: </h2>
+	  <p>Số tiền và số lặp lấy theo giá trị nhập vào. Ví dụ nhập vào số tiền 1000 và số lặp 70 thì sau 70 lượt số tiền sẽ nhân đôi</p>
+	  
+	  <h2>Giữ vốn: </h2>
+	  <p>Mặc định số tiền là 1000</p>
+	  <p>Mặc định số lặp 70</p>
+	  <p>Từ lượt 210-300 mặc định là 1000</p>
+	  <p>Từ lượt 300-370 mặc định là 8000</p>
+	  <p>Từ lượt 370-440 mặc định là 16000</p>
+	  <p>Từ lượt 440-510 mặc định là 32000</p>
+	  <p>Từ 510 mặc định là 1000</p>
+	  
+	  <h2>Hên xui: </h2>
+	  <p>Mặc định số tiền là 1000</p>
+	  <p>Mặc định số lặp bằng giá trị nhập vào (đang mặc định là 70)</p>
+	  <p>Từ lượt 210 (hoặc số lặp X 3) sẽ chuyển sang công thức hên xui</p>
+	  <p>Hên xui: nếu lượt chẵn thì số tiền vẫn là cấp số nhân bình thường (ví dụ lượt 212 đang là 8000 thì số tiền là 8000)</p>
+	  <p>Hên xui: nếu lượt lẻ thì số tiền 1000</p>
 	</div>
-
+	
 	<div id="vitural" class="tab-content">
 		<div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
 		  <h3>Nhập thông tin</h3>
@@ -222,6 +203,25 @@
 		<div class="login-container">
 		  <label>Token</label>
 		  <input type="text" id="token" placeholder="Token">
+		</div>
+		
+		<!-- Công thức tính -->
+		<div class="radio-group-wrapper">
+		  <label class="radio-group-label">Chọn công thức:</label>
+		  <div id="betTypeGroup" class="radio-group">
+			<label>
+			  <input type="radio" name="betType" value="1" checked>
+			  <span>Chuẩn</span>
+			</label>
+			<label>
+			  <input type="radio" name="betType" value="2">
+			  <span>Giữ vốn</span>
+			</label>
+			<label>
+			  <input type="radio" name="betType" value="3">
+			  <span>Hên xui</span>
+			</label>
+		  </div>
 		</div>
 		
 		<div id="messageAuto">
@@ -937,149 +937,6 @@
       return json;
     }
 	
-	async function getAllRecordsAI(type) {
-      const allRecords = [];
-      const summary = {}; // A → danh sách code
-      for (let i = 0; i < 100; i++) summary[i] = [];
-
-      const pageSize = 100;
-      let currentPage = 1;
-      let totalPages = 1;
-      let statusEl = document.getElementById("statusAI");
-      statusEl.innerText = "Đang tải dữ liệu...";
-
-      try {
-        // Trang đầu
-        const firstPage = await getPage(type, currentPage, pageSize);
-        allRecords.push(...firstPage.records);
-        const totalRecords = firstPage.page.total;
-        totalPages = Math.ceil(totalRecords / pageSize);
-
-        statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
-
-        // Các trang tiếp theo
-        for (let page = 2; page <= totalPages; page++) {
-          const pageData = await getPage(type, page, pageSize);
-          allRecords.push(...pageData.records);
-          statusEl.innerText += `✅ Trang ${page}/${totalPages} - Tổng ${allRecords.length} records\n`;
-        }
-
-        // Tổng hợp
-        const summaryByDate = {};
-
-		// Sắp xếp các records theo field `code` tăng dần
-		const sortedRecords = allRecords.sort((a, b) => {
-		  if (!a.code || !b.code) return 0;
-		  return a.code.localeCompare(b.code);
-		});
-
-		sortedRecords.forEach(record => {
-		  const code = record.code;
-		  if (!code || code.length < 8) return;
-
-		  const dateStr = code.slice(0, 8); // Lấy ngày từ field 'code'
-		  const special = record.result?.special;
-		  if (!special) return;
-
-		  const twoDigit = parseInt(special.slice(-2));
-		  if (isNaN(twoDigit)) return;
-
-		  if (!summaryByDate[dateStr]) {
-			summaryByDate[dateStr] = [];
-		  }
-
-		  summaryByDate[dateStr].push(twoDigit);
-		});
-
-		// Tạo mảng kết quả cuối cùng
-		const result = Object.entries(summaryByDate).map(([date, numbers]) => ({
-		  date,
-		  number: numbers
-		}));
-		
-		todayResult = result[result.length - 1];
-		return result;
-      } catch (err) {
-        statusEl.innerText += `❌ Lỗi: ${err.message}`;
-        console.error(err);
-      }
-    }
-	
-
-  function prepareTrainingFromJSON(dataJSON) {
-    const inputs = [];
-    const labels = [];
-
-    dataJSON.forEach(item => {
-      const seq = item.number;
-      const lookback = todayResult.number.length;
-      const horizon = 200;
-
-      if (seq.length < lookback + horizon) return;
-
-      for (let start = 0; start <= seq.length - lookback - horizon; start += 10) {
-        const input = seq.slice(start, start + lookback);
-        const future = seq.slice(start + lookback, start + lookback + horizon);
-        const labelNum = future[Math.floor(Math.random() * future.length)];
-        const label = new Array(100).fill(0);
-        label[labelNum] = 1;
-
-        inputs.push(input);
-        labels.push(label);
-      }
-    });
-
-    const xs = tf.tensor2d(inputs);
-    const ys = tf.tensor2d(labels);
-    return { xs, ys };
-  }
-
-  async function createModel() {
-    const m = tf.sequential();
-    m.add(tf.layers.dense({ inputShape: [todayResult.number.length], units: 128, activation: 'relu' }));
-    m.add(tf.layers.dropout({ rate: 0.2 }));
-    m.add(tf.layers.dense({ units: 100, activation: 'softmax' }));
-    m.compile({ optimizer: 'adam', loss: 'categoricalCrossentropy', metrics: ['accuracy'] });
-    return m;
-  }
-
-  async function trainModel() {
-    document.getElementById("resultAI").innerText = "⏳ Đang xử lý dữ liệu và huấn luyện...";
-
-	const parsedData = await getAllRecordsAI(3);
-    const { xs, ys } = prepareTrainingFromJSON(parsedData);
-    model = await createModel();
-    await model.fit(xs, ys, {
-      epochs: 10,
-      batchSize: 32,
-      callbacks: {
-        onEpochEnd: (epoch, logs) => {
-          console.log(`Epoch ${epoch + 1}: loss=${logs.loss.toFixed(4)}`);
-        }
-      }
-    });
-
-    xs.dispose();
-    ys.dispose();
-
-    document.getElementById("resultAI").innerText = "✅ Mô hình đã huấn luyện xong! Bấm nút dự đoán để lấy số.";
-  }
-
-  async function predict() {
-    if (!model) {
-      document.getElementById("result").innerText = "⚠️ Vui lòng huấn luyện mô hình trước!";
-      return;
-    }
-
-    const inputTensor = tf.tensor2d([todayResult.number]);  // [1, 646]
-    const prediction = model.predict(inputTensor);
-    const predictedIndex = (await prediction.argMax(1).data())[0];
-    document.getElementById("resultAI").innerText = `🔮 Dự đoán: Số ${predictedIndex} sẽ xuất hiện trong 200 phần tử tiếp theo.`;
-
-    inputTensor.dispose();
-    prediction.dispose();
-  }
-  
   </script>
 </body>
 </html>

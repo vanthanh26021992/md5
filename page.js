@@ -27,12 +27,23 @@ class BetApp {
 	this.totalSpent = 0;
 	this.totalWin = 0;
 	this.formatter = this.formatter();
+	this.betType = "1";
+	
+	this.logArea.textContent += `[${new Date().toLocaleTimeString()}] ❌ Dùng công thức ${this.betType}\n`;
 	
 	const tokenInput = document.getElementById("token");
-	// Lắng nghe sự kiện thay đổi giá trị
 	tokenInput.addEventListener("input", () => {
 	  this.tp_token = tokenInput.value;
 	  console.log("Giá trị token hiện tại:", this.tp_token);
+	});
+	
+	const betTypeGroup = document.getElementById("betTypeGroup");
+	betTypeGroup.addEventListener("change", (event) => {
+	  if (event.target.name === "betType") {
+		const selectedValue = event.target.value;
+		this.betType = selectedValue;
+		this.logArea.textContent += `[${new Date().toLocaleTimeString()}] ❌ Chuyển qua dùng công thức ${this.betType}\n`;
+	  }
 	});
 	  
 	document.getElementById("startBtn").addEventListener("click", () => this.startJob());
@@ -221,7 +232,7 @@ class BetApp {
 		if (lastResult === firstNumber.number) {
 		  document.getElementById("successSound").play();
 		  this.totalWin += firstNumber.amount * 98;
-		  this.successLog.textContent += `[${now}] ✅ WIN số ${firstNumber.number} với số tiền ${this.formatter.format(firstNumber.amount)} ở lượt thứ ${this.countTurn} || Tổng lỗ: ${this.formatter.format(this.totalSpent)} || Tổng lời: ${this.formatter.format(this.totalWin)} || Lợi nhuận: ${this.formatter.format(this.totalWin - this.totalSpent)}\n\n`;
+		  this.successLog.textContent += `[${now}] ✅ WIN số ${firstNumber.number} với số tiền ${this.formatter.format(firstNumber.amount)} ở lượt thứ ${this.countTurn - 1} || Tổng lỗ: ${this.formatter.format(this.totalSpent)} || Tổng lời: ${this.formatter.format(this.totalWin)} || Lợi nhuận: ${this.formatter.format(this.totalWin - this.totalSpent)}\n\n`;
 		  
 		  const input = document.getElementById("desiredMoney");
 		  const value = Number(input.value);
@@ -230,13 +241,13 @@ class BetApp {
 			return;
 		  }
 		  this.countTurn = 1;
-		  firstNumber.amount = this.calcBet4(this.countTurn, this.selectedAmount);
+		  firstNumber.amount = this.calcBet(this.countTurn, this.selectedAmount);
 		}
 		
 		let totalAmount = 0;
 		for (let i = 0; i < this.numbers.length; i++) {
 		  const record = this.numbers[i];
-		  record.amount = this.calcBet4(this.countTurn, this.selectedAmount);
+		  record.amount = this.calcBet(this.countTurn, this.selectedAmount);
 		  totalAmount = totalAmount + record.amount;
 		}
 		
@@ -259,8 +270,6 @@ class BetApp {
 
 		const data = await res.json();
 		console.log("Kết quả API:", data);
-		
-		//TODO: hiển thị thông tin đánh, đánh các số - số tiền - tổng tiền lãi - tổng tiền lỗ
 		
 		const number = this.numbers[0].number;
 		const amount = this.numbers[0].amount;
@@ -296,20 +305,14 @@ class BetApp {
       return "";
     }
 	
-	calcBet3(turnIndex) {
-	  if (turnIndex <= this.TURN_DEFAULT) return 1000;
-	  else if (turnIndex > this.TURN_DEFAULT * 1 && turnIndex <= this.TURN_DEFAULT * 2) return 2000;
-	  else if (turnIndex > this.TURN_DEFAULT * 2 && turnIndex <= this.TURN_DEFAULT * 3) return 4000;
-	  else if (turnIndex > this.TURN_DEFAULT * 3 && turnIndex <= this.TURN_DEFAULT * 4) return 8000;
-	  else if (turnIndex > this.TURN_DEFAULT * 4 && turnIndex <= this.TURN_DEFAULT * 5) return 16000;
-	  else if (turnIndex > this.TURN_DEFAULT * 5 && turnIndex <= this.TURN_DEFAULT * 6) return 32000;
-	  else if (turnIndex > this.TURN_DEFAULT * 6 && turnIndex <= this.TURN_DEFAULT * 7) return 64000;
-	  else if (turnIndex > this.TURN_DEFAULT * 7 && turnIndex <= this.TURN_DEFAULT * 8) return 50000;
-	  else if (turnIndex > this.TURN_DEFAULT * 8 && turnIndex <= this.TURN_DEFAULT * 9) return 50000;
-	  return 1000;
+	calcBet(turnIndex, amount) {
+	  if (this.betType === "1") return this.calcBet1(turnIndex, amount);
+	  else if (this.betType === "2") return this.calcBet2(turnIndex);
+	  else if (this.betType === "3") return this.calcBet3(turnIndex);
+	  else return this.calcBet1(turnIndex, amount);
 	}
 	
-	calcBet4(turnIndex, amount) {
+	calcBet1(turnIndex, amount) {
 	  if (turnIndex <= this.TURN_DEFAULT) return amount * 1;
 	  else if (turnIndex > this.TURN_DEFAULT * 1 && turnIndex <= this.TURN_DEFAULT * 2) return amount * 2;
 	  else if (turnIndex > this.TURN_DEFAULT * 2 && turnIndex <= this.TURN_DEFAULT * 3) return amount * 4;
@@ -320,6 +323,40 @@ class BetApp {
 	  else if (turnIndex > this.TURN_DEFAULT * 7 && turnIndex <= this.TURN_DEFAULT * 8) return amount * 50;
 	  else if (turnIndex > this.TURN_DEFAULT * 8 && turnIndex <= this.TURN_DEFAULT * 9) return amount * 50;
 	  return amount;
+	}
+	
+	calcBet2(turnIndex, amount) {
+	  if (turnIndex <= 70) return 1000;
+	  else if (turnIndex > 70 && turnIndex <= 140) return 2000;
+	  else if (turnIndex > 140 && turnIndex <= 210) return 4000;
+	  else if (turnIndex > 210 && turnIndex <= 300) return 1000;
+	  else if (turnIndex > 300 && turnIndex <= 370) return 8000;
+	  else if (turnIndex > 370 && turnIndex <= 440) return 16000;
+	  else if (turnIndex > 440 && turnIndex <= 510) return 32000;
+	  return 1000;
+	}
+	
+	calcBet3(turnIndex) {
+	  if (turnIndex <= this.TURN_DEFAULT) {
+		return 1000;
+	  } else if (turnIndex > this.TURN_DEFAULT * 1 && turnIndex <= this.TURN_DEFAULT * 2) {
+		return 2000;
+	  } else if (turnIndex > this.TURN_DEFAULT * 2 && turnIndex <= this.TURN_DEFAULT * 3) {
+		return 4000;
+	  } else if (turnIndex > this.TURN_DEFAULT * 3 && turnIndex <= this.TURN_DEFAULT * 4) {
+		if (turnIndex % 2 === 0) return 8000;
+	  } else if (turnIndex > this.TURN_DEFAULT * 4 && turnIndex <= this.TURN_DEFAULT * 5) {
+		if (turnIndex % 2 === 0) return 16000;
+	  } else if (turnIndex > this.TURN_DEFAULT * 5 && turnIndex <= this.TURN_DEFAULT * 6) {
+		if (turnIndex % 2 === 0) return 32000;
+	  } else if (turnIndex > this.TURN_DEFAULT * 6 && turnIndex <= this.TURN_DEFAULT * 7) {
+		if (turnIndex % 2 === 0) return 64000;
+	  } else if (turnIndex > this.TURN_DEFAULT * 7 && turnIndex <= this.TURN_DEFAULT * 8) {
+		if (turnIndex % 2 === 0) return 128000;
+	  } else if (turnIndex > this.TURN_DEFAULT * 8 && turnIndex <= this.TURN_DEFAULT * 9) {
+		if (turnIndex % 2 === 0) return 256000;
+	  }
+	  return 1000;
 	}
 	
 	formatter() {
