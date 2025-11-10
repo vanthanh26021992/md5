@@ -47,10 +47,10 @@ class BetApp {
 	  }
 	});
 	  
-	document.getElementById("startBtn").addEventListener("click", () => this.startJob());
 	document.getElementById("startBtn1").addEventListener("click", () => this.startJob1());
 	document.getElementById("stopBtn").addEventListener("click", () => this.stopJob());
 	document.getElementById("updateBtn").addEventListener("click", () => this.updateJob());
+	document.getElementById("updateLoopBtn").addEventListener("click", () => this.updateLoopJob());
 
 	this.render();
   }
@@ -147,6 +147,13 @@ class BetApp {
 		  alert("Nhập số dự phòng");
 		}
 	  }
+	}
+	
+	updateLoopJob() {
+	  const number = this.numbers[0].number;
+	  const row = document.querySelector(`#row-${number}`);
+	  this.TURN_DEFAULT = parseInt(row.querySelector(".loop-turn").value) || 70;
+	  this.logArea.textContent += `[${new Date().toLocaleTimeString()}] ❌ Cập nhật số lượt mới ${this.TURN_DEFAULT}\n`;
 	}
 	
 	addRow(num) {
