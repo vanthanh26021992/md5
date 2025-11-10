@@ -85,8 +85,9 @@
 	  <div class="tab" onclick="openTab('summary')">Tổng hợp dữ liệu</div>
 	  <div class="tab" onclick="openTab('vitural')">Giả lập</div>
 	  <div class="tab" onclick="openTab('report')">Thống kê</div>
-	  <div class="tab active" onclick="openTab('auto')">Auto 1</div>
+	  <div class="tab" onclick="openTab('auto')">Auto 1</div>
 	  <div class="tab" onclick="openTab('autoFake')">Giả lập Auto 1</div>
+	  <div class="tab active" onclick="openTab('auton')">Auto N</div>
 	  <div class="tab" onclick="openTab('noteTab')">Ghi chú</div>
 	</div>
   
@@ -163,7 +164,7 @@
 		</div>
 	</div>
 	
-	<div id="auto" class="tab-content active">
+	<div id="auto" class="tab-content">
 	  <h1 class="text-2xl font-bold mb-6">Number Selector</h1>
 	  
 	  <div class="main-container">
@@ -259,7 +260,104 @@
 		  <pre id="successLog"></pre>
 		</div>
 	  </div>
-	  <audio id="successSound" src="win.mp3" preload="auto" hidden></audio>
+	  <script src="auton.js"></script>
+	</div>
+	
+	<!-- AUTO N -->
+	<div id="auton" class="tab-content active">
+	  <h1 class="text-2xl font-bold mb-6">Number Selector</h1>
+	  
+	  <div class="main-container">
+	  <!-- Danh sách số 00-99 (10 hàng x 10 cột) -->
+	  <div id="numberListN" class="mb-6 space-y-2"></div>
+
+	  <!-- Danh sách số đã chọn -->
+	  <div class="mb-6" id="selectedContainerN">
+		<h2 class="font-semibold text-lg mb-2">Danh sách số đã chọn</h2>
+		<table class="w-full border text-center">
+		  <thead>
+			<tr class="bg-gray-200">
+			  <th class="border p-2 w-16">Số</th>
+			  <th class="border p-2 w-28">Số tiền</th>
+			  <th class="border p-2 w-28">Số lượt</th>
+			  <th class="border p-2">Số dự phòng</th>
+			</tr>
+		  </thead>
+		  <tbody id="selectedNumbersN"></tbody>
+		</table>
+		
+		<!-- ô nhập số tiền mong muốn -->
+		<div class="desired-money-container">
+		  <label for="desiredMoney">💰 Số tiền mong muốn:</label>
+		  <input type="number" id="desiredMoneyN" min="1" value="500000">
+		</div>
+		
+		<!-- Ô nhập Username / Password -->
+		<div class="login-container">
+		  <label>Username</label>
+		  <input type="text" id="usernameN" placeholder="Username">
+		</div>
+		<div class="login-container">
+		  <label>Password</label>
+		  <input type="password" id="passwordN" placeholder="Password"> <br>
+		</div>
+		<div class="login-container">
+		  <label>Token</label>
+		  <input type="text" id="tokenN" placeholder="Token">
+		</div>
+		
+		<!-- Công thức tính -->
+		<div class="radio-group-wrapper">
+		  <label class="radio-group-label">Chọn công thức:</label>
+		  <div id="betTypeGroupN" class="radio-group">
+			<label>
+			  <input type="radio" name="betTypeN" value="1" checked>
+			  <span>Chuẩn</span>
+			</label>
+			<label>
+			  <input type="radio" name="betTypeN" value="2">
+			  <span>Giữ vốn</span>
+			</label>
+			<label>
+			  <input type="radio" name="betTypeN" value="3">
+			  <span>Hên xui</span>
+			</label>
+			<label>
+			  <input type="radio" name="betTypeN" value="4">
+			  <span>Ưu tiên</span>
+			</label>
+		  </div>
+		</div>
+		
+		<div id="messageAutoN">
+		</div>
+		
+		<!-- Nút điều khiển -->
+		<div id="runningIndicatorN">
+		  <div class="running-dot"></div>
+		  <span>Đang chạy...</span>
+		</div>
+		
+		<!-- Nút điều khiển -->
+		<div class="flex gap-4 mb-6">
+		  <button id="startBtn1N" class="btn btn-start">▶ Start 1</button>
+		  <button id="stopBtnN" class="btn btn-stop">■ Stop</button>
+		</div>
+	  </div>
+	  
+	  </div>
+	 
+	  <!-- Log -->
+	  <div class="log-container">
+		<div class="log-box" style="flex: 0.6">
+		  <h3 class="font-semibold mb-2">Log công việc</h3>
+		  <pre id="logAreaN"></pre>
+		</div>
+		<div class="log-box">
+		  <h3 class="font-semibold mb-2">Log kết quả đúng</h3>
+		  <pre id="successLogN"></pre>
+		</div>
+	  </div>
 	  <script src="page.js"></script>
 	</div>
 	
@@ -271,6 +369,8 @@
 	  </div>
 	  <script src="runfake.js"></script>
 	</div>
+	
+	<audio id="successSound" src="win.mp3" preload="auto" hidden></audio>
   <script>
   
    const apiBaseUrl = "https://api.vgjt.info/ldmd5/games/1/results";

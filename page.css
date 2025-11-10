@@ -4,6 +4,13 @@
       gap: 8px;
 	  flex: 1;
     }
+	
+	#numberListN {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 8px;
+	  flex: 1;
+    }
 
     /* ======= Ô số ======= */
     .num-cell {
@@ -35,6 +42,38 @@
 
     /* Ẩn checkbox, chỉ click vào ô */
     .num-cell input[type="checkbox"] {
+      display: none;
+    }
+	
+	.num-cell-N {
+      background-color: #ffffff;
+      border: 2px solid #d1d5db;
+      border-radius: 0.5rem;
+      text-align: center;
+      padding: 10px 0;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .num-cell-N:hover {
+      background-color: #f1f5f9;
+      transform: scale(1.05);
+      border-color: #9ca3af;
+    }
+
+    /* ======= Khi được chọn ======= */
+    .num-cell-N.selected {
+      background-color: #34d399; /* xanh mint */
+      border-color: #059669;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    /* Ẩn checkbox, chỉ click vào ô */
+    .num-cell-N input[type="checkbox"] {
       display: none;
     }
 
@@ -117,6 +156,11 @@
 	  margin: 20px; /* khoảng cách 10px hai bên mỗi nút */
 	}
 	
+	#startBtnN, #stopBtnN {
+	  margin: 20px; /* khoảng cách 10px hai bên mỗi nút */
+	}
+	
+	
 	.btn:disabled {
 	  background-color: #ccc;
 	  cursor: not-allowed;
@@ -135,6 +179,21 @@
 	}
 
 	#runningIndicator.show {
+	  display: flex;
+	}
+
+	/* ===== Indicator công việc đang chạy ===== */
+	#runningIndicatorN {
+	  margin: 20px;
+	  display: none;
+	  align-items: center;
+	  gap: 8px;
+	  margin-bottom: 1rem;
+	  font-weight: 600;
+	  color: #16a34a;
+	}
+
+	#runningIndicatorN.show {
 	  display: flex;
 	}
 
@@ -229,10 +288,15 @@
       margin-left: 30px;
 	}
 	
+	#selectedContainerN {
+	  flex: 1;
+	  margin-top: -70px;
+      margin-left: 30px;
+	}
+	
 	.radio-group-wrapper {
 	  display: flex;
 	  flex-direction: column;
-	  align-items: center;
 	  margin: 20px 0;
 	}
 
@@ -246,7 +310,6 @@
 	.radio-group {
 	  display: flex;
 	  gap: 10px;
-	  justify-content: center;
 	}
 
 	.radio-group label {
