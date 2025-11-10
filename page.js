@@ -219,15 +219,14 @@ class BetApp {
 	  const url = `https://api.vgjt.info/ldmd5/user/bet?token=${this.tp_token}`;
 	  
 	  if (this.numbers.length === 0) {
-		const selected = document.querySelectorAll(".num-cell input[type='checkbox']:checked");
-	    for (const checkbox of selected) {
-	      const number = checkbox.value;
-	      const row = document.querySelector(`#row-${number}`);
-	      const amount = parseInt(row.querySelector(".amount").value) || 1000;
-		  this.selectedAmount = amount;
-		  this.TURN_DEFAULT = parseInt(row.querySelector(".loop-turn").value) || 70;
-	      this.numbers.push({amount: amount, number: number});
-	    }
+	    const number = this.storedNumbers[0].number;
+	    const row = document.querySelector(`#row-${number}`);
+	    const amount = parseInt(row.querySelector(".amount").value) || 1000;
+		this.selectedAmount = amount;
+		this.TURN_DEFAULT = parseInt(row.querySelector(".loop-turn").value) || 70;
+	    this.numbers.push({amount: amount, number: number});
+		console.log(this.numbers);
+	    
 	  }
 	  
 	  console.log("TURN_DEFAULT ", this.TURN_DEFAULT);
