@@ -240,6 +240,10 @@ class BetAppAutoN {
 		if (matched) {
 		  this.numbers = this.numbers.filter(object => object.number !== lastResult);
 		}
+		if (this.numbers.length === 0) {
+		  this.stopJob();
+		  return;
+		}
 		
 		let totalAmount = 0;
 		let numberPrint = [];
