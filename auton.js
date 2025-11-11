@@ -232,7 +232,7 @@ class BetAppAutoN {
 			}
 			
 			let addRowEle = document.getElementById(`row-N-${lastResult}`);
-		    addRowEle.classList.remove("highlight-green");
+		    addRowEle.classList.add("highlight-green");
 			break;
 		  }
 		}
