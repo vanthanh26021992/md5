@@ -46,7 +46,22 @@ class BetAppAutoN {
 		this.logArea.textContent += `[${new Date().toLocaleTimeString()}] ❌ Chuyển qua dùng công thức ${this.betType}\n`;
 	  }
 	});
+
+	document.addEventListener("click", (event) => {
+	  const number = event.target.dataset.number;
 	  
+	  if (event.target.classList.contains("backup-stop")) {
+		const row = document.querySelector(`#row-N-${number}`);
+	    const backup = row.querySelector(".backup-numberN").value;
+		this.stopNumber(number, backup);
+		
+	  } else if (event.target.classList.contains("backup-update")) {
+		const row = document.querySelector(`#row-N-${number}`);
+	    const backup = row.querySelector(".backup-numberN").value;
+		this.updateNumber(number, backup);
+	  }
+	});
+	
 	document.getElementById("startBtn1N").addEventListener("click", () => this.startJob1());
 	document.getElementById("stopBtnN").addEventListener("click", () => this.stopJob());
 
@@ -142,6 +157,10 @@ class BetAppAutoN {
 		<td class="border p-2"><input type="number" value="1000" class="amountN"></td>
 		<td class="border p-2"><input type="number" value="50" class="loop-turnN"></td>
 		<td class="border p-2"><input type="text" class="backup-numberN" placeholder="Số dự phòng"></td>
+		<td class="border p-2">
+		  <button class="backup-stop" data-number="${num}">Stop</button>
+		  <button class="backup-update" data-number="${num}">Update</button>
+		</td>
 	  `;
 	  this.selectedNumbers.appendChild(row);
 	}
@@ -149,6 +168,47 @@ class BetAppAutoN {
 	removeRow(num) {
 	  const row = document.getElementById(`row-N-${num}`);
 	  if (row) row.remove();
+	}
+	
+	stopNumber(number, newNumber) {
+	  this.numbers = this.numbers.filter(object => object.number !== number);
+	  if (newNumber) this.numbers = this.numbers.filter(object => object.number !== newNumber);
+	  
+	  let addRowEle = document.getElementById(`row-N-${number}`);
+	  addRowEle.classList.add("highlight-orange");
+			
+	  alert(`Đã dừng số ${number}`);
+	  console.log(this.numbers);
+	  if (this.numbers.length === 0) {
+		this.stopJob();
+	  }
+	}
+
+	updateNumber(number, newNumber) {
+	  if (!newNumber) {
+		alert(`Mời bạn nhập số mới thay thế cho ${number}`);
+		return;
+	  }
+	  
+	  for (let i = 0; i < this.numbers.length; i++) {
+		const record = this.numbers[i];
+		if (newNumber === record.number) {
+		  alert(`Số ${newNumber} đã có trong danh sách`);
+		  return;
+		}
+	  }
+	  
+	  for (let i = 0; i < this.numbers.length; i++) {
+		const record = this.numbers[i];
+		if (number === record.number) {
+		  record.number = newNumber || number;
+		  let addRowEle = document.getElementById(`row-N-${number}`);
+		  addRowEle.classList.add("highlight-update");
+		  alert(`Đã đổi số ${number} thành ${newNumber}`);
+		  break;
+		}
+	  }
+	  console.log(this.numbers);
 	}
 
 	async login() {
@@ -300,6 +360,7 @@ class BetAppAutoN {
 	  if (this.betType === "1") return this.calcBet1(turnIndex, amount);
 	  else if (this.betType === "2") return this.calcBet2(turnIndex);
 	  else if (this.betType === "3") return this.calcBet3(turnIndex);
+	  else if (this.betType === "5") return this.calcBet4(turnIndex);
 	  else return this.calcBet1(turnIndex, amount);
 	}
 	
@@ -347,6 +408,17 @@ class BetAppAutoN {
 	  } else if (turnIndex > this.TURN_DEFAULT * 8 && turnIndex <= this.TURN_DEFAULT * 9) {
 		if (turnIndex % 2 === 0) return 256000;
 	  }
+	  return 1000;
+	}
+	
+	calcBet4(turnIndex) {
+	  if (turnIndex <= 100) return 1000;
+	  else if (turnIndex > 100 && turnIndex <= 150) return 2000;
+	  else if (turnIndex > 150 && turnIndex <= 200) return 4000;
+	  else if (turnIndex > 200 && turnIndex <= 250) return 8000;
+	  else if (turnIndex > 250 && turnIndex <= 300) return 16000;
+	  else if (turnIndex > 300 && turnIndex <= 350) return 32000;
+	  else if (turnIndex > 350 && turnIndex <= 400) return 64000;
 	  return 1000;
 	}
 	

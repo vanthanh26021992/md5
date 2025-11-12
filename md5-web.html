@@ -38,7 +38,12 @@
       width: 100%;
       margin-top: 20px;
     }
-    th, td {
+    th {
+      border: 1px solid #888;
+      padding: 6px 12px;
+      text-align: center;
+    }
+	td {
       border: 1px solid #888;
       padding: 6px 12px;
       text-align: left;
@@ -226,6 +231,11 @@
 			  <input type="radio" name="betType" value="4">
 			  <span>Ưu tiên</span>
 			</label>
+			<label>
+			  <input type="radio" name="betType" value="5">
+			  <span>100-50</span>
+			</label>
+
 		  </div>
 		</div>
 		
@@ -240,7 +250,7 @@
 		
 		<!-- Nút điều khiển -->
 		<div class="flex gap-4 mb-6">
-		  <button id="startBtn1" class="btn btn-start">▶ Start 1</button>
+		  <button id="startBtn1" class="btn btn-start">▶ Start</button>
 		  <button id="stopBtn" class="btn btn-stop">■ Stop</button>
 		  <button id="updateBtn" class="btn btn-update">▶ Dự phòng</button>
 		  <button id="updateLoopBtn" class="btn btn-update">▶ Số lượt</button>
@@ -280,7 +290,8 @@
 			  <th class="border p-2 w-16">Số</th>
 			  <th class="border p-2 w-28">Số tiền</th>
 			  <th class="border p-2 w-28">Số lượt</th>
-			  <th class="border p-2">Số dự phòng</th>
+			  <th class="border p-2 w-28">Số dự phòng</th>
+			  <th class="border p-2 w-28">Action</th>
 			</tr>
 		  </thead>
 		  <tbody id="selectedNumbersN"></tbody>
@@ -326,6 +337,10 @@
 			  <input type="radio" name="betTypeN" value="4">
 			  <span>Ưu tiên</span>
 			</label>
+			<label>
+			  <input type="radio" name="betTypeN" value="5">
+			  <span>100-50</span>
+			</label>
 		  </div>
 		</div>
 		
@@ -340,7 +355,7 @@
 		
 		<!-- Nút điều khiển -->
 		<div class="flex gap-4 mb-6">
-		  <button id="startBtn1N" class="btn btn-start">▶ Start 1</button>
+		  <button id="startBtn1N" class="btn btn-start">▶ Start</button>
 		  <button id="stopBtnN" class="btn btn-stop">■ Stop</button>
 		</div>
 	  </div>

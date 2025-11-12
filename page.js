@@ -337,6 +337,7 @@ class BetApp {
 	  if (this.betType === "1") return this.calcBet1(turnIndex, amount);
 	  else if (this.betType === "2") return this.calcBet2(turnIndex);
 	  else if (this.betType === "3") return this.calcBet3(turnIndex);
+	  else if (this.betType === "5") return this.calcBet4(turnIndex);
 	  else return this.calcBet1(turnIndex, amount);
 	}
 	
@@ -384,6 +385,17 @@ class BetApp {
 	  } else if (turnIndex > this.TURN_DEFAULT * 8 && turnIndex <= this.TURN_DEFAULT * 9) {
 		if (turnIndex % 2 === 0) return 256000;
 	  }
+	  return 1000;
+	}
+	
+	calcBet4(turnIndex) {
+	  if (turnIndex <= 100) return 1000;
+	  else if (turnIndex > 100 && turnIndex <= 150) return 2000;
+	  else if (turnIndex > 150 && turnIndex <= 200) return 4000;
+	  else if (turnIndex > 200 && turnIndex <= 250) return 8000;
+	  else if (turnIndex > 250 && turnIndex <= 300) return 16000;
+	  else if (turnIndex > 300 && turnIndex <= 350) return 32000;
+	  else if (turnIndex > 350 && turnIndex <= 400) return 64000;
 	  return 1000;
 	}
 	

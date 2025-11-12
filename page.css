@@ -355,6 +355,32 @@
 	.highlight-orange {
 	  background-color: #F4A460;
 	}
+	
+	.highlight-update {
+	  background-color: #FF6347;
+	}
+	
+	.backup-stop {
+	  padding: 0px 10px;
+      margin-right: 10px;
+	}
+	
+	.amountN {
+	  width: 100px;
+	}
+	
+	.loop-turnN {
+	  width: 100px;
+	}
+	
+	.backup-numberN {
+	  width: 100px;
+	}
+	
+	.backup-update {
+	  padding: 0px 10px;
+      margin-right: 10px;
+	}
 
 
 
