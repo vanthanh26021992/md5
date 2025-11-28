@@ -175,7 +175,7 @@ class BetAppAutoN {
 	  if (newNumber) this.numbers = this.numbers.filter(object => object.number !== newNumber);
 	  
 	  let addRowEle = document.getElementById(`row-N-${number}`);
-	  addRowEle.classList.add("highlight-orange");
+	  if (addRowEle) addRowEle.classList.add("highlight-orange");
 			
 	  alert(`Đã dừng số ${number}`);
 	  console.log(this.numbers);
@@ -203,7 +203,7 @@ class BetAppAutoN {
 		if (number === record.number) {
 		  record.number = newNumber || number;
 		  let addRowEle = document.getElementById(`row-N-${number}`);
-		  addRowEle.classList.add("highlight-update");
+		  if (addRowEle) addRowEle.classList.add("highlight-update");
 		  alert(`Đã đổi số ${number} thành ${newNumber}`);
 		  break;
 		}
@@ -292,7 +292,7 @@ class BetAppAutoN {
 			}
 			
 			let addRowEle = document.getElementById(`row-N-${lastResult}`);
-		    addRowEle.classList.add("highlight-green");
+		    if (addRowEle) addRowEle.classList.add("highlight-green");
 			break;
 		  }
 		}

@@ -90,10 +90,11 @@
 	  <div class="tab" onclick="openTab('summary')">Tổng hợp dữ liệu</div>
 	  <div class="tab" onclick="openTab('vitural')">Giả lập</div>
 	  <div class="tab" onclick="openTab('report')">Thống kê</div>
-	  <div class="tab" onclick="openTab('auto')">Auto 1</div>
+	  <div class="tab active" onclick="openTab('auto')">Auto 1</div>
 	  <div class="tab" onclick="openTab('autoFake')">Giả lập Auto 1</div>
-	  <div class="tab active" onclick="openTab('auton')">Auto N</div>
+	  <div class="tab" onclick="openTab('auton')">Auto N</div>
 	  <div class="tab" onclick="openTab('noteTab')">Ghi chú</div>
+	  <div class="tab" onclick="openTab('autoFake10050')">Giả lập 100-50</div>
 	</div>
   
 	<div id="summary" class="tab-content">
@@ -169,7 +170,7 @@
 		</div>
 	</div>
 	
-	<div id="auto" class="tab-content">
+	<div id="auto" class="tab-content active">
 	  <h1 class="text-2xl font-bold mb-6">Number Selector</h1>
 	  
 	  <div class="main-container">
@@ -274,7 +275,7 @@
 	</div>
 	
 	<!-- AUTO N -->
-	<div id="auton" class="tab-content active">
+	<div id="auton" class="tab-content">
 	  <h1 class="text-2xl font-bold mb-6">Number Selector</h1>
 	  
 	  <div class="main-container">
@@ -385,6 +386,23 @@
 	  <script src="runfake.js"></script>
 	</div>
 	
+	<!-- Auto fake 100-50-->
+	<div id="autoFake10050" class="tab-content">
+	  <input id="numbersInput" type="text" placeholder="Nhập số, cách nhau bằng dấu phẩy">
+	  <button id="startBtn">Start</button>
+
+		<div>
+			<p>Random: <span id="randomNum"></span></p>
+			<p>Tổng lượt: <span id="turnCount">0</span></p>
+			<p>Lời: <span id="profit">0</span></p>
+			<p>Lỗ: <span id="loss">0</span></p>
+			<p>Còn lại: <span id="remaining"></span></p>
+		</div>
+
+		<pre id="logBox" style="background:#eee;padding:10px;height:200px;overflow:auto"></pre>
+	  <script src="runfake10050.js"></script>
+	</div>
+	
 	<audio id="successSound" src="win.mp3" preload="auto" hidden></audio>
   <script>
   
@@ -402,8 +420,6 @@
 	
 	//Tính độ lệch chuẩn
 	async function calculateStdTrust1440(records) {
-		//let records = await findAll(3, "calculateStdTrust1440Status", "calculateStdTrust1440Output");
-
 		// Bước 1: Sắp xếp theo `code` tăng dần
 		//records.sort((a, b) => a.code.localeCompare(b.code));
 		
@@ -466,8 +482,7 @@
 	
 	//Tính độ lệch chuẩn 1440
 	async function calculateStd1440(records) {
-		//let records = await findAll(3, "calculateStd1440Status", "calculateStd1440Output");
-
+		
 		// Bước 1: Sắp xếp theo `code` tăng dần
 		//records.sort((a, b) => a.code.localeCompare(b.code));
 		
@@ -716,6 +731,15 @@
       const json = await response.json();
       return json;
     }
+	
+	function getCurrentTurns(isCurrDate) {
+	  const now = new Date();        // thời gian hiện tại
+	  const hours = now.getHours();  // giờ (0–23)
+	  const minutes = now.getMinutes(); // phút (0–59)
+
+	  if (isCurrDate) return = hours * 60 + minutes;  
+	  return 24 * 60 * 6 + hours * 60 + minutes;
+	}
 
     async function getAllRecords(type) {
       const allRecords = [];
@@ -732,15 +756,13 @@
       try {
 		tableContainer.innerHTML = "Đang tải dữ liệu";
         // Trang đầu
-        const firstPage = await getPage(type, currentPage, pageSize);
-        allRecords.push(...firstPage.records);
-        const totalRecords = firstPage.page.total;
+        const totalRecords = getCurrentTurns(true);
         totalPages = Math.ceil(totalRecords / pageSize);
 
         statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
 
         // Các trang tiếp theo
-        for (let page = 2; page <= totalPages; page++) {
+        for (let page = 1; page <= totalPages; page++) {
           const pageData = await getPage(type, page, pageSize);
           allRecords.push(...pageData.records);
           statusEl.innerText += `✅ Trang ${page}/${totalPages} - Tổng ${allRecords.length} records\n`;
@@ -798,15 +820,14 @@
       try {
 		tableContainer.innerHTML = "Kết quả sẽ hiển thị ở đây...";
         // Trang đầu
-        const firstPage = await getPage(type, currentPage, pageSize);
-        allRecords.push(...firstPage.records);
-        const totalRecords = firstPage.page.total;
+        
+        const totalRecords = getCurrentTurns(false);
         totalPages = Math.ceil(totalRecords / pageSize);
 
         statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
 
         // Các trang tiếp theo
-        for (let page = 2; page <= totalPages; page++) {
+        for (let page = 1; page <= totalPages; page++) {
           const pageData = await getPage(type, page, pageSize);
           allRecords.push(...pageData.records);
           statusEl.innerText += `✅ Trang ${page}/${totalPages} - Tổng ${allRecords.length} records\n`;
