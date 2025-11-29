@@ -758,6 +758,7 @@
         // Trang đầu
         const totalRecords = getCurrentTurns(true);
         totalPages = Math.ceil(totalRecords / pageSize);
+		if (type === 2) totalPages = 15;
 
         statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
 
