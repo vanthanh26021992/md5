@@ -300,7 +300,7 @@ class BetAppAutoN {
 		if (matched) {
 		  this.numbers = this.numbers.filter(object => object.number !== lastResult);
 		}
-		if (this.numbers.length === 0) {
+		if (this.numbers.length === 0 || this.numbers.length === 1) {
 		  this.stopJob();
 		  return;
 		}
