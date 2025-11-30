@@ -102,7 +102,6 @@
 		<button onclick="getAllRecords(2)">Hôm qua</button>
 		<button onclick="getAllRecords24h()">24h qua</button>
 		<button onclick="getAllRecords(3)">1 Tuần qua</button>
-		<button onclick="groupByMinute(3)">Theo giờ</button>		
 		<p id="output">Kết quả sẽ hiển thị ở đây...</p>
 		<p id="status">Tải dữ liệu...</p>
 	</div>
@@ -823,7 +822,7 @@
         // Trang đầu
         
         const totalRecords = getCurrentTurns(false);
-        totalPages = 69;
+        totalPages = Math.ceil(totalRecords / pageSize);;
 
         statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
 
@@ -962,119 +961,20 @@
 	  document.querySelector(`.tab[onclick="openTab('${tabId}')"]`).classList.add('active');
 	  document.getElementById(tabId).classList.add('active');
 	}
-	
-	async function groupByMinute(type) {
-	  
-	  const allRecords = [];
-      const summary = {}; // A → danh sách code
-      for (let i = 0; i < 100; i++) summary[i] = [];
-
-      const pageSize = 100;
-      let currentPage = 1;
-      let totalPages = 1;
-      let statusEl = document.getElementById("status");
-      let tableContainer = document.getElementById("output");
-      statusEl.innerText = "Đang tải dữ liệu...";
-
-      try {
-        // Trang đầu
-        const firstPage = await getPage(type, currentPage, pageSize);
-        allRecords.push(...firstPage.records);
-        const totalRecords = firstPage.page.total;
-        totalPages = Math.ceil(totalRecords / pageSize);
-
-        statusEl.innerText = `🔄 Đang tải ${totalRecords} records từ ${totalPages} trang...\n`;
-
-        // Các trang tiếp theo
-        for (let page = 2; page <= totalPages; page++) {
-          const pageData = await getPage(type, page, pageSize);
-          allRecords.push(...pageData.records);
-          statusEl.innerText += `✅ Trang ${page}/${totalPages} - Tổng ${allRecords.length} records\n`;
-        }
-
-		statusEl.innerText += `✅ Tải xong ${totalRecords} records từ ${totalPages} trang...\n`;
-		
-        // Tổng hợp
-        
-		// Gom dữ liệu theo phút
-		  const grouped = {}; // { time: { date: number } }
-		  const allDatesSet = new Set();
-
-		  allRecords.forEach(item => {
-			const code = item.code;
-			const date = code.slice(0, 8);      // YYYYMMDD
-			const time = item.result.date.slice(11, 16);     // HHMM
-			const special = item.result.special;
-			
-
-			// Lấy 2 số cuối của special
-			let number = '';
-			if (special && /^\d{5}$/.test(special)) {
-				number = special.slice(-2); // Lấy 2 số cuối
-			}
-
-			allDatesSet.add(date);
-
-			if (!grouped[time]) grouped[time] = {};
-			grouped[time][date] = number;
-		  });
-
-		  // Danh sách 1440 phút trong ngày
-		  const allTimes = Array.from({ length: 1440 }, (_, i) => {
-			const hour = String(Math.floor(i / 60)).padStart(2, '0');
-			const minute = String(i % 60).padStart(2, '0');
-			return hour + ":" + minute;
-		  });
-
-		  // Danh sách ngày (giảm dần)
-		  const allDates = Array.from(allDatesSet).sort((a, b) => b.localeCompare(a));
-
-		  // Tạo bảng HTML
-		  let html = '<table border="1" cellpadding="4" cellspacing="0"><thead><tr>';
-		  html += '<th>🕒 Thời gian</th>';
-		  allDates.forEach(date => {
-			html += `<th>${formatDate(date)}</th>`;
-		  });
-		  html += '</tr></thead><tbody>';
-
-		  allTimes.forEach(time => {
-			html += `<tr><td>${time}</td>`;
-			allDates.forEach(date => {
-			  const value = grouped[time]?.[date] ?? '';
-			  html += `<td>${value}</td>`;
-			});
-			html += '</tr>';
-		  });
-
-		  html += '</tbody></table>';
-		  document.getElementById('output').innerHTML = html;
-      } catch (err) {
-        statusEl.innerText += `❌ Lỗi: ${err.message}`;
-        console.error(err);
-      }
-	}
-
-	// Định dạng "20250729" → "29/07/2025"
-	function formatDate(yyyymmdd) {
-	  return `${yyyymmdd.slice(6, 8)}/${yyyymmdd.slice(4, 6)}/${yyyymmdd.slice(0, 4)}`;
-	}
-
-	// Định dạng "0001" → "00:01"
-	function formatTime(hhmm) {
-	  return `${hhmm.slice(0, 2)}:${hhmm.slice(2)}`;
-	}
-	
-	//Train AI
-	let model;
-	let todayResult;
   
     async function getPage(type, page, size = 100) {
+	  await wait(2000);
+	  
       const url = `${apiBaseUrl}?type=${type}&page=${page}&size=${size}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error("Lỗi khi gọi API trang " + page);
       const json = await response.json();
       return json;
     }
+	
+	function wait(ms) {
+	  return new Promise(resolve => setTimeout(resolve, ms));
+	}
 	
   </script>
 </body>
