@@ -465,7 +465,7 @@
 		  .map((arr, num) => {
 			console.log("số: " + num + "----- đã về các ngày: " + arr);
 			
-			result += `<b>Số ${num}</b>: ${arr}<br><br>`;
+			result += `<b>Số ${num}</b>: ${arr} -- ${getSlope(arr)}<br><br>`;
 			
 			const total = arr.reduce((a, b) => a + b, 0);
 			if (total === 0) return null; // bỏ qua số chưa từng xuất hiện
@@ -963,7 +963,7 @@
 	}
   
     async function getPage(type, page, size = 100) {
-	  await wait(2000);
+	  await wait(1000);
 	  
       const url = `${apiBaseUrl}?type=${type}&page=${page}&size=${size}`;
       const response = await fetch(url);
@@ -974,6 +974,23 @@
 	
 	function wait(ms) {
 	  return new Promise(resolve => setTimeout(resolve, ms));
+	}
+	
+	function getSlope(arr) {
+		const n = arr.length;
+		let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+
+		for (let i = 0; i < n; i++) {
+			sumX += i;
+			sumY += arr[i];
+			sumXY += i * arr[i];
+			sumX2 += i * i;
+		}
+
+		// công thức tính slope m
+		const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+		
+		return slope > 0 ? "📈 Tăng" : slope < 0 ? "📉 Giảm" : "➡️ Ngang";
 	}
 	
   </script>
