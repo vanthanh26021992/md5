@@ -344,7 +344,7 @@ class BetAppAutoN {
 		  this.countTurn++;
 		  this.totalSpent += totalAmount;
 		} else {
-		  this.logArea.textContent += `[${now}] ❌ Số ${numberPrint.toString()} thất bại --- ${data.msg} \n`;
+		  this.logArea.textContent += `[${now}] ❌ Số ${numberPrint.toString()} thất bại --- ${data.message} \n`;
 		}
 		
 		if (data.code === "004") await this.login();
